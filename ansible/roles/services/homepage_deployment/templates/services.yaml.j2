@@ -4,7 +4,8 @@
 #   + https://github.com/homarr-labs/dashboard-icons/tree/main/png
 #   + https://simpleicons.org/ (For si- prefix icons)
 
-{% set nextcloud = (docker_services | selectattr('name', 'equalto', 'nextcloud') | list | first) | default(None) %}
+{% set nextcloud = docker_services | selectattr('name', 'equalto', 'nextcloud') | first %}
+{% set jellyfin = docker_services | selectattr('name', 'equalto', 'jellyfin') | first %}
 {% set grafana = docker_services | selectattr('name', 'equalto', 'grafana') | first %}
 {% set prometheus = docker_services | selectattr('name', 'equalto', 'prometheus') | first %}
 {% set npm = docker_services | selectattr('name', 'equalto', 'npm') | first %}
@@ -12,7 +13,7 @@
 
 - Monitoring:
   - Grafana:
-      icon: si-grafana-#F46800
+      icon: grafana.png
       href: https://grafana.{{ public_domain_name }}
       description: Analytics platform for dashboards
       siteMonitor: {{ grafana.forward_scheme | default('http') }}://{{ grafana.forward_host }}:{{ grafana.forward_port }}
@@ -25,7 +26,7 @@
 {% for host in groups['all'] %}
 {% if 'containers' in hostvars[host].group_names or host == 'KVM-SRV01' %}
   - Prometheus ({{ hostvars[host].computer_name }}):
-      icon: si-prometheus-#E6522C
+      icon: prometheus.png
       href: https://prometheus.{{ public_domain_name }}
       description: {{ 'Linux' if 'containers' in hostvars[host].group_names else 'Windows' }} Node
       siteMonitor: {{ prometheus.forward_scheme | default('http') }}://{{ prometheus.forward_host }}:{{ prometheus.forward_port }}
@@ -66,7 +67,7 @@
 
 - Networking:
   - Nginx Proxy Manager:
-      icon: si-nginxproxymanager-#F15833
+      icon: nginx-proxy-manager.png
       href: https://npm.{{ public_domain_name }}
       description: Reverse proxy for host forwarding
       siteMonitor: {{ npm.forward_scheme | default('http') }}://{{ npm.forward_host }}:{{ npm.forward_port }}
@@ -77,7 +78,7 @@
         password: "{{ domain_admin_password }}"
 {% for device in tailscale_devices %}
   - Tailscale ({{ device.name }}):
-      icon: si-tailscale-#242424
+      icon: tailscale.png
       href: https://login.tailscale.com/admin/machines
       description: VPN on {{ device.name }}
       siteMonitor: https://login.tailscale.com/admin/machines
@@ -89,7 +90,7 @@
 
 - Management:
   - Nextcloud:
-      icon: si-nextcloud-#0082C9
+      icon: nextcloud.png
       href: https://nextcloud.{{ public_domain_name }}
       description: Self-hosted cloud storage & collaboration
       siteMonitor: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}/status.php
@@ -98,9 +99,24 @@
         url: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}
         username: "{{ ansible_user }}"
         password: "{{ ansible_password }}"
+  - Jellyfin:
+      icon: jellyfin.png
+      href: https://jellyfin.{{ public_domain_name }}
+      description: Media server
+      siteMonitor: {{ jellyfin.forward_scheme | default('http') }}://{{ jellyfin.forward_host }}:{{ jellyfin.forward_port }}/system/info/public
+      widget:
+        type: jellyfin
+        url: {{ jellyfin.forward_scheme | default('http') }}://{{ jellyfin.forward_host }}:{{ jellyfin.forward_port }}
+        key: "{{ jellyfin_api_key }}"
+        version: 2
+        enableBlocks: true
+        enableNowPlaying: true
+        enableUser: true
+        showEpisodeNumber: true
+        expandOneStreamToTwoRows: true
 {% for env in portainer_environments %}
   - Portainer ({{ env.name }}):
-      icon: si-{{ portainer.name }}-#13BEF9
+      icon: portainer.png
       href: "https://portainer.{{ public_domain_name }}/#!/{{ env.id }}/docker/dashboard"
       description: "{{ env.name }} environment"
       siteMonitor: "{{ portainer.forward_scheme | default('http') }}://{{ portainer.forward_host }}:{{ portainer.forward_port }}/#!/{{ env.id }}/docker/dashboard"
