@@ -6,6 +6,7 @@ administrator_gid: 1000
 
 # Jellyfin
 jellyfin_parent_dir: "/home/{{ ansible_user }}/docker/jellyfin"
+jellyfin_api_key: {{ JELLYFIN_API_KEY }}
 
 # Immich
 immich_parent_dir: "/home/{{ ansible_user }}/docker/immich"
