@@ -30,6 +30,7 @@ homepage_config_files:
 
 # Home Assistant
 home_assistant_parent_dir: "/home/{{ ansible_user }}/docker/home_assistant"
+home_assistant_long_lived_access_token: {{ HOME_ASSISTANT_LONG_LIVED_ACCESS_TOKEN }}
 
 # Cloudflared
 cloudflared_parent_dir: "/home/{{ ansible_user }}/docker/cloudflared"
