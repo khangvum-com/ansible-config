@@ -7,3 +7,4 @@ postgres_password: "{{ ansible_password }}"
 authentik_postgres_db: "authentik"
 authentik_secret_key: {{ AUTHENTIK_SECRET_KEY }}
 authentik_outpost_token: {{ AUTHENTIK_OUTPOST_TOKEN }}
+authentik_api_key: {{ AUTHENTIK_API_KEY }}
