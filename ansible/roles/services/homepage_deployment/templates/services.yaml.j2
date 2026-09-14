@@ -4,13 +4,51 @@
 #   + https://github.com/homarr-labs/dashboard-icons/tree/main/png
 #   + https://simpleicons.org/ (For si- prefix icons)
 
-{% set grafana = docker_services | selectattr('name', 'equalto', 'grafana') | first %}
-{% set prometheus = docker_services | selectattr('name', 'equalto', 'prometheus') | first %}
 {% set nextcloud = docker_services | selectattr('name', 'equalto', 'nextcloud') | first %}
 {% set jellyfin = docker_services | selectattr('name', 'equalto', 'jellyfin') | first %}
 {% set immich = docker_services | selectattr('name', 'equalto', 'immich') | first %}
+{% set grafana = docker_services | selectattr('name', 'equalto', 'grafana') | first %}
+{% set prometheus = docker_services | selectattr('name', 'equalto', 'prometheus') | first %}
+{% set homeassistant = docker_services | selectattr('name', 'equalto', 'homeassistant') | first %}
 {% set portainer = docker_services | selectattr('name', 'equalto', 'portainer') | first %}
 {% set npm = docker_services | selectattr('name', 'equalto', 'npm') | first %}
+
+- Media:
+  - Jellyfin:
+      icon: jellyfin.png
+      href: https://jellyfin.{{ public_domain_name }}
+      description: Media server
+      siteMonitor: {{ jellyfin.forward_scheme | default('http') }}://{{ jellyfin.forward_host }}:{{ jellyfin.forward_port }}/system/info/public
+      widget:
+        type: jellyfin
+        url: {{ jellyfin.forward_scheme | default('http') }}://{{ jellyfin.forward_host }}:{{ jellyfin.forward_port }}
+        key: "{{ jellyfin_api_key }}"
+        version: 2
+        enableBlocks: true
+        enableNowPlaying: true
+        enableUser: true
+        showEpisodeNumber: true
+        expandOneStreamToTwoRows: true
+  - Nextcloud:
+      icon: nextcloud.png
+      href: https://nextcloud.{{ public_domain_name }}
+      description: Self-hosted cloud storage & collaboration
+      siteMonitor: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}/status.php
+      widget:
+        type: nextcloud
+        url: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+  - Immich:
+      icon: immich.png
+      href: https://immich.{{ public_domain_name }}
+      description: Self-hosted photo & video backup solution
+      siteMonitor: {{ immich.forward_scheme | default('http') }}://{{ immich.forward_host }}:{{ immich.forward_port }}/api/server/ping
+      widget:
+        type: immich
+        url: {{ immich.forward_scheme | default('http') }}://{{ immich.forward_host }}:{{ immich.forward_port }}
+        key: "{{ immich_api_key }}"
+        version: 2
 
 - Monitoring:
   - Grafana:
@@ -66,6 +104,30 @@
 {% endif %}
 {% endfor %}
 
+- Management:
+  - Home Assistant:
+      icon: home-assistant.png
+      href: https://homeassistant.{{ public_domain_name }}
+      description: Home automation platform
+      siteMonitor: {{ homeassistant.forward_scheme | default('http') }}://{{ homeassistant.forward_host }}:{{ homeassistant.forward_port }}/manifest.json
+      widget:
+        type: homeassistant
+        url: {{ homeassistant.forward_scheme | default('http') }}://{{ homeassistant.forward_host }}:{{ homeassistant.forward_port }}
+        key: "{{ home_assistant_long_lived_access_token }}"
+{% for env in portainer_environments %}
+  - Portainer ({{ env.name }}):
+      icon: portainer.png
+      href: "https://portainer.{{ public_domain_name }}/#!/{{ env.id }}/docker/dashboard"
+      description: "{{ env.name }} environment"
+      siteMonitor: "{{ portainer.forward_scheme | default('http') }}://{{ portainer.forward_host }}:{{ portainer.forward_port }}/#!/{{ env.id }}/docker/dashboard"
+      widget:
+        type: {{ portainer.name }}
+        url: "{{ portainer.forward_scheme | default('http') }}://{{ portainer.forward_host }}:{{ portainer.forward_port }}"
+        env: {{ env.id }}
+        key: "{{ portainer_access_token }}"
+        ignoreSsl: true
+{% endfor %}
+
 - Networking:
   - Nginx Proxy Manager:
       icon: nginx-proxy-manager.png
@@ -87,54 +149,4 @@
         type: tailscale
         deviceid: {{ device.id }}
         key: {{ tailscale_api_key }}
-{% endfor %}
-
-- Management:
-  - Jellyfin:
-      icon: jellyfin.png
-      href: https://jellyfin.{{ public_domain_name }}
-      description: Media server
-      siteMonitor: {{ jellyfin.forward_scheme | default('http') }}://{{ jellyfin.forward_host }}:{{ jellyfin.forward_port }}/system/info/public
-      widget:
-        type: jellyfin
-        url: {{ jellyfin.forward_scheme | default('http') }}://{{ jellyfin.forward_host }}:{{ jellyfin.forward_port }}
-        key: "{{ jellyfin_api_key }}"
-        version: 2
-        enableBlocks: true
-        enableNowPlaying: true
-        enableUser: true
-        showEpisodeNumber: true
-        expandOneStreamToTwoRows: true
-  - Nextcloud:
-      icon: nextcloud.png
-      href: https://nextcloud.{{ public_domain_name }}
-      description: Self-hosted cloud storage & collaboration
-      siteMonitor: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}/status.php
-      widget:
-        type: nextcloud
-        url: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}
-        username: "{{ ansible_user }}"
-        password: "{{ ansible_password }}"
-  - Immich:
-      icon: immich.png
-      href: https://immich.{{ public_domain_name }}
-      description: Self-hosted photo & video backup solution
-      siteMonitor: {{ immich.forward_scheme | default('http') }}://{{ immich.forward_host }}:{{ immich.forward_port }}/api/server/ping
-      widget:
-        type: immich
-        url: {{ immich.forward_scheme | default('http') }}://{{ immich.forward_host }}:{{ immich.forward_port }}
-        key: "{{ immich_api_key }}"
-        version: 2
-{% for env in portainer_environments %}
-  - Portainer ({{ env.name }}):
-      icon: portainer.png
-      href: "https://portainer.{{ public_domain_name }}/#!/{{ env.id }}/docker/dashboard"
-      description: "{{ env.name }} environment"
-      siteMonitor: "{{ portainer.forward_scheme | default('http') }}://{{ portainer.forward_host }}:{{ portainer.forward_port }}/#!/{{ env.id }}/docker/dashboard"
-      widget:
-        type: {{ portainer.name }}
-        url: "{{ portainer.forward_scheme | default('http') }}://{{ portainer.forward_host }}:{{ portainer.forward_port }}"
-        env: {{ env.id }}
-        key: "{{ portainer_access_token }}"
-        ignoreSsl: true
 {% endfor %}
