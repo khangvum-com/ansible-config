@@ -13,6 +13,7 @@
 {% set homeassistant = docker_services | selectattr('name', 'equalto', 'homeassistant') | first %}
 {% set portainer = docker_services | selectattr('name', 'equalto', 'portainer') | first %}
 {% set adguardhome = docker_services | selectattr('name', 'equalto', 'adguardhome') | first %}
+{% set cloudflared = docker_services | selectattr('name', 'equalto', 'cloudflared') | first %}
 {% set npm = docker_services | selectattr('name', 'equalto', 'npm') | first %}
 
 - Media:
@@ -151,6 +152,16 @@
         url: {{ adguardhome.forward_scheme | default('http') }}://{{ adguardhome.forward_host }}:{{ adguardhome.forward_port }}
         username: "{{ ansible_user }}"
         password: "{{ ansible_password }}"
+  - Cloudflare Tunnel:
+      icon: cloudflare.png
+      href: https://dash.cloudflare.com
+      description: Cloudflare Tunnel for secure access to services
+      siteMonitor: https://dash.cloudflare.com
+      widget:
+        type: cloudflared
+        accountid: "{{ cloudflare_account_id }}"
+        tunnelid: "{{ cloudflare_tunnel_id }}"
+        key: "{{ cloudflare_api_token }}"
   - Nginx Proxy Manager:
       icon: nginx-proxy-manager.png
       href: https://npm.{{ public_domain_name }}
