@@ -40,6 +40,9 @@ docker_services:
   - name: npm
     forward_host: "{{ hostvars['KVM-VPN01'].ansible_host }}"
     forward_port: 81
+  - name: adguardhome
+    forward_host: "{{ hostvars['KVM-MGMT01'].ansible_host }}"
+    forward_port: 3001
   - name: portainer
     forward_scheme: https
     forward_host: "{{ hostvars['KVM-MGMT01'].ansible_host }}"

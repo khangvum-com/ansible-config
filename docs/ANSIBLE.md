@@ -41,6 +41,7 @@ Ansible manages **_configuration_**, **_service deployments_**, and **_domain se
 
 |                                                 Role                                                  | Description                                                                                                                               |
 | :---------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
+|      [`adguardhome_deployment`](../ansible/roles/services/adguardhome_deployment/tasks/main.yml)      | Configure **_AdGuard Home_** as a **_self-hosted DNS server_** and **_network-wide ad blocker_**                                          |
 |        [`authentik_deployment`](../ansible/roles/services/authentik_deployment/tasks/main.yml)        | Configure **_Authentik_** as a **_centralized identity provider_** and **_SSO gateway_** for **_authentication_** and **_authorization_** |
 |        [`docker_configuration`](../ansible/roles/services/docker_configuration/tasks/main.yml)        | Configure **_Docker_** settings                                                                                                           |
 |        [`nextcloud_deployment`](../ansible/roles/services/nextcloud_deployment/tasks/main.yml)        | Configure **_Nextcloud_** as a **_self-hosted file manager_**                                                                             |
