@@ -56,21 +56,45 @@
           client_secret: "{{ tailscale_oauth_secret }}"
           grant_type: "client_credentials"
       register: oauth
+      delegate_to: localhost
 
-    # curl -X PUT \
+    # curl -X POST \
     #   -H "Authorization: Bearer {{ ACCESS_TOKEN }}" \
     #   -H "Content-Type: application/json" \
-    #   -d '{"khangvum.lab": ["{{ DC01_IP_ADDRESS }}"]}' \
-    #   "https://api.tailscale.com/api/v2/tailnet/'TAILNET_ID'/dns/split-dns"
-    - name: Split DNS Setup
+    #   -d '{
+    #     "nameservers": [{"address": "{{ MGMT01_IP_ADDRESS }}", "useWithExitNode": false}],
+    #     "splitDNS": {"{{ DOMAIN_NAME }}": [{"address": "{{ DC01_IP_ADDRESS }}", "useWithExitNode": false}]},
+    #     "preferences": {"overrideLocalDNS": true, "magicDNS": true}
+    #   }' \
+    #   "https://api.tailscale.com/api/v2/tailnet/{{ TAILNET_ID }}/dns/configuration"
+    - name: Tailscale DNS Settings Configuration
       ansible.builtin.uri:
-        url: "https://api.tailscale.com/api/v2/tailnet/{{ tailnet_id }}/dns/split-dns"
-        method: PUT
+        url: "https://api.tailscale.com/api/v2/tailnet/{{ tailnet_id }}/dns/configuration"
+        method: POST
         headers:
           Authorization: "Bearer {{ oauth.json.access_token }}"
+          Content-Type: "application/json"
         body_format: json
         body: |
           {
-            "{{ domain_name }}": ["{{ hostvars['KVM-DC01'].ansible_host }}"]
+            "nameservers": [
+              {
+                "address": "{{ hostvars['KVM-MGMT01'].ansible_host }}",
+                "useWithExitNode": false
+              }
+            ],
+            "splitDNS": {
+              "{{ domain_name }}": [
+                {
+                  "address": "{{ hostvars['KVM-DC01'].ansible_host }}",
+                  "useWithExitNode": false
+                }
+              ]
+            },
+            "preferences": {
+              "overrideLocalDNS": true,
+              "magicDNS": true
+            }
           }
         status_code: 200
+      delegate_to: localhost

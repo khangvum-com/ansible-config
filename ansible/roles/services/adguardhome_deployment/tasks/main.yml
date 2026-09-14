@@ -1,0 +1,72 @@
+---
+# Reference: https://github.com/AdguardTeam/AdGuardHome/wiki/Docker
+- name: Linux Variables Load
+  ansible.builtin.include_vars:
+    file: ../../../variables/os_var/linux_var.yml
+
+- name: AdGuard Home Directory Structures Creation
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+  loop:
+    - "{{ adguardhome_parent_dir }}"
+    - "{{ adguardhome_parent_dir }}/work"
+    - "{{ adguardhome_parent_dir }}/conf"
+
+- name: Docker Compose File Creation
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ adguardhome_parent_dir }}/docker-compose.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+  register: docker_compose_file
+
+- name: AdGuard Home Deployment
+  community.docker.docker_compose_v2:
+    project_src: "{{ adguardhome_parent_dir }}"
+    pull: "{{ docker_image_pull_action }}"
+    state: present
+    remove_orphans: true
+
+- name: AdGuard Home Readiness Verification
+  ansible.builtin.uri:
+    url: "http://{{ hostvars['KVM-MGMT01'].ansible_host }}:3001/control/status"
+    method: GET
+    user: "{{ ansible_user }}"
+    password: "{{ ansible_password }}"
+    force_basic_auth: yes
+    status_code: 200
+  register: adguard_status
+  until: adguard_status.status == 200
+  delegate_to: localhost
+
+# curl -X POST \
+#   -u "{{ USERNAME }}:{{ PASSWORD }}" \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#     "upstream_dns": [
+#       "[/khangvum.lab/]{{ DC_01_IP }}",
+#       "https://dns.cloudflare-dns.com/dns-query",
+#       "1.1.1.1"
+#     ]
+#   }' \
+#   http://localhost:3001/control/dns_config
+- name: AdGuard Home Upstream DNS Configuration
+  ansible.builtin.uri:
+    url: "http://{{ hostvars['KVM-MGMT01'].ansible_host }}:3001/control/dns_config"
+    method: POST
+    user: "{{ ansible_user }}"
+    password: "{{ ansible_password }}"
+    force_basic_auth: yes
+    body_format: json
+    body:
+      upstream_dns:
+        - "[/{{ domain_name }}/]{{ hostvars['KVM-DC01'].ansible_host }}"
+        - "https://dns.cloudflare-dns.com/dns-query"
+        - "1.1.1.1"
+    status_code: 200
+  delegate_to: localhost
