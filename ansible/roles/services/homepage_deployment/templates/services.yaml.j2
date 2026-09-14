@@ -9,6 +9,7 @@
 {% set immich = docker_services | selectattr('name', 'equalto', 'immich') | first %}
 {% set grafana = docker_services | selectattr('name', 'equalto', 'grafana') | first %}
 {% set prometheus = docker_services | selectattr('name', 'equalto', 'prometheus') | first %}
+{% set authentik = docker_services | selectattr('name', 'equalto', 'authentik') | first %}
 {% set homeassistant = docker_services | selectattr('name', 'equalto', 'homeassistant') | first %}
 {% set portainer = docker_services | selectattr('name', 'equalto', 'portainer') | first %}
 {% set npm = docker_services | selectattr('name', 'equalto', 'npm') | first %}
@@ -105,6 +106,16 @@
 {% endfor %}
 
 - Management:
+  - Authentik:
+      icon: authentik.png
+      href: https://authentik.{{ public_domain_name }}
+      description: Identity provider & access management
+      siteMonitor: {{ authentik.forward_scheme | default('http') }}://{{ authentik.forward_host }}:{{ authentik.forward_port }}/api/v3/
+      widget:
+        type: authentik
+        url: {{ authentik.forward_scheme | default('http') }}://{{ authentik.forward_host }}:{{ authentik.forward_port }}
+        key: "{{ authentik_api_key }}"
+        version: 2
   - Home Assistant:
       icon: home-assistant.png
       href: https://homeassistant.{{ public_domain_name }}
