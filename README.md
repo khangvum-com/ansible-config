@@ -89,12 +89,22 @@ flowchart LR
                                                         **Storage:** 100GB
                                                         **OS:** Windows Server 2025
                                                         **Role:** IIS Web Server`")]
+  SRV01 --> WRK01[KVM-WRK01] -- specs --- WRK01_SPECS[("`**CPU:** 4 vCPU
+                                                        **RAM:** 16GB
+                                                        **Storage:** 100GB
+                                                        **OS:** Windows 11 Pro
+                                                        **Role:** Workstation`")]
+  SRV01 --> WRK03[KVM-WRK03] -- specs --- WRK03_SPECS[("`**CPU:** 4 vCPU
+                                                        **RAM:** 16GB
+                                                        **Storage:** 100GB
+                                                        **OS:** Windows 10 Pro
+                                                        **Role:** Workstation`")]
 
 
   %% Styling
   class SRV01 hosts
   classDef hosts fill:#f1c232,stroke:#000,color:#000
-  class DB01,DC01,DC02,IAM01,MEDIA01,MGMT01,MONITOR01,NAS01,ROUTER01,VPN01,VPN02,WEB01 vms
+  class DB01,DC01,DC02,IAM01,MEDIA01,MGMT01,MONITOR01,NAS01,ROUTER01,VPN01,VPN02,WEB01,WRK01,WRK02,WRK03,WRK04 vms
   classDef vms fill:#7ea6e0,stroke:#000,color:#000
   class SRV01_SPECS,DB01_SPECS,DC01_SPECS,DC02_SPECS,IAM01_SPECS,MEDIA01_SPECS,MGMT01_SPECS,MONITOR01_SPECS,NAS01_SPECS,ROUTER01_SPECS,VPN01_SPECS,VPN02_SPECS,WEB01_SPECS,WRK01_SPECS,WRK02_SPECS,WRK03_SPECS,WRK04_SPECS specs
   classDef specs fill:#d3d3d3,stroke:#000,color:#000
