@@ -42,3 +42,8 @@ variable "services" {
   }))
   default = []
 }
+
+variable "email_routing_map" {
+  description = "Map of custom domain email prefixes to destination email addresses"
+  type        = map(string)
+}
