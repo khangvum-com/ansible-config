@@ -14,7 +14,7 @@ services:
       - 9443:9443
       - 8000:8000
     environment:
-      - TRUSTED_ORIGINS=https://portainer.{{ domain_name }},https://portainer.{{ public_domain_name }}
+      - TRUSTED_ORIGINS=https://portainer.{{ domain_name }},https://portainer.{{ domain_name }}
 {% else %}
   # --- PORTAINER AGENT ---
   portainer-agent:

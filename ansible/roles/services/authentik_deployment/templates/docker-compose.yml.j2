@@ -41,7 +41,7 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: "{{ postgres_password }}"
       AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgres_db }}"
       AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
-      AUTHENTIK_WEB__BASE_URL: "https://authentik.{{ public_domain_name }}"
+      AUTHENTIK_WEB__BASE_URL: "https://authentik.{{ domain_name }}"
       AUTHENTIK_STORAGE__FILE__PATH: /data
     volumes:
       - ./data:/data
@@ -84,7 +84,7 @@ services:
       - "389:3389"
       - "636:6636"
     environment:
-      AUTHENTIK_HOST: https://authentik.{{ public_domain_name }}
+      AUTHENTIK_HOST: https://authentik.{{ domain_name }}
       AUTHENTIK_INSECURE: "false"
       AUTHENTIK_TOKEN: "{{ authentik_outpost_token }}"
     depends_on:
