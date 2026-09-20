@@ -5,12 +5,6 @@ windows_11_pro_x64_unattend_bypass_requirements.iso
 windows_11_pro_x64_unattend.iso
 windows_server_2025_standard_x64_unattend.iso
 
-# Terraform
-.terraform/
-terraform.tfvars
-terraform.tfstate
-terraform.tfstate.backup
-
 # Others
 command.txt
 ansible.log
