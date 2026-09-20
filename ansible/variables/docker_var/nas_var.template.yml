@@ -18,7 +18,7 @@ nextcloud_directories:
     group: "{{ www_data_gid }}"
     mode: '0770'
 nextcloud_postgres_db: "nextcloud"
-nextcloud_version: "34.0.3"
+nextcloud_version: "34.0.4"
 nas_mount_dir: /mnt/nas
 nas_path: "//{{ hostvars['KVM-SRV01'].ansible_host }}/NAS"
 
