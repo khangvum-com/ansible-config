@@ -9,13 +9,3 @@ services:
       - ./ansible:/opt/ansible
     environment:
       - ANSIBLE_CONFIG=/opt/ansible/ansible.cfg
-
-  terraform_service:
-    restart: always
-    container_name: terraform_service
-    build:
-      context: ./terraform-docker-settings
-      dockerfile: Dockerfile
-    volumes:
-      - ./terraform:/opt/terraform
-    working_dir: /opt/terraform
