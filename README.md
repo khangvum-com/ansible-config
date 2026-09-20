@@ -1,22 +1,13 @@
-# Infrastructure as Code (IaC) Homelab
+# Ansible Configuration
 
-A **_homelab provisioning and configuration automation_** solution powered by **_Terraform_** and **_Ansible_**, containerized with **_Docker_**. This setup simplifies **_Windows_**, **_Linux_**, and **_standalone ESXi_** management by leveraging **_declarative provisioning_** and **_idempotent configuration_**, streamlining **_Infrastructure as Code_** (**_IaC_**) principles across hypervisors and service nodes.
+An **_agentless configuration automation_** solution powered by **_Ansible_**, containerized with **_Docker_**. This setup simplifies **_Windows_**, **_Linux_**, and **_standalone ESXi_** management by leveraging **_idempotent configuration_** and **_Infrastructure as Code_** (**_IaC_**) principles across hypervisors and service nodes.
 
 ## Features
 
-- **_Declarative infrastructure provisioning_** using **_Terraform_** across hypervisors and cloud platforms.
 - **_Agentless configuration management_** powered by **_Ansible_** over **_SSH_**.
 - **_Docker-based controller_** for environment consistency across platforms.
 - **_Modular architecture_** leveraging reusable **_Terraform modules_** and **_Ansible roles_** with external variable configuration.
-
-## Architecture & Responsibilities
-
-This repository separates **_Infrastructure as Code (IaC)_** responsibilities into **_two_** dedicated layers:
-
-|              Layer              |     Tool      | Responsibilities                                                                                                                                          |
-| :-----------------------------: | :-----------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Infrastructure Provisioning** | **Terraform** | Declarative management of **_Cloudflare Zero Trust_** resources, including **_access policies_**, **_Cloudflared tunnels_**, and **_DNS CNAME records_**. |
-|  **Configuration Management**   |  **Ansible**  | Agentless **_post-provisioning state_** enforcement, **_package management_**, and **_service configuration_**                                            |
+- **_Centralized variable management_** using external **_YAML_** files and encrypted via **_Ansible Vault_**.
 
 ## Infrastructure Overview
 
@@ -110,7 +101,225 @@ flowchart LR
   classDef specs fill:#d3d3d3,stroke:#000,color:#000
 ```
 
-## Documentation
+## Roles
 
-- [Ansible Guide & Role Reference](docs/ANSIBLE.md)
-- [Terraform Modules & Deployment](docs/TERRAFORM.md)
+### General
+
+|                                                    Role                                                    | Description                                                                  |
+| :--------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------- |
+|         [`firewall_configuration`](../ansible/roles/general/firewall_configuration/tasks/main.yml)         | Configure **_firewall rules_**                                               |
+|   [`linux_hostname_configuration`](../ansible/roles/general/linux_hostname_configuration/tasks/main.yml)   | Set **_hostname_** of Linux hosts                                            |
+|        [`linux_ntp_configuration`](../ansible/roles/general/linux_ntp_configuration/tasks/main.yml)        | Configure **_NTP settings_** for time synchronization on **_Linux hosts_**   |
+|            [`linux_updates`](../ansible/roles/general/local_user_configuration/tasks/main.yml)             | Perform **_Linux package updates_**                                          |
+|       [`local_user_configuration`](../ansible/roles/general/local_user_configuration/tasks/main.yml)       | Manage **_local user accounts_** and **_passwords_**                         |
+|           [`region_configuration`](../ansible/roles/general/region_configuration/tasks/main.yml)           | Set **_regional_** and **_locale settings_**                                 |
+|           [`system_configuration`](../ansible/roles/general/system_configuration/tasks/main.yml)           | Apply **_system-wide settings_**                                             |
+|             [`system_information`](../ansible/roles/general/system_information/tasks/main.yml)             | Gather **_host information_**                                                |
+| [`windows_hostname_configuration`](../ansible/roles/general/windows_hostname_configuration/tasks/main.yml) | Set **_hostname_** of Windows hosts                                          |
+|      [`windows_ntp_configuration`](../ansible/roles/general/windows_ntp_configuration/tasks/main.yml)      | Configure **_NTP settings_** for time synchronization on **_Windows hosts_** |
+|                [`windows_updates`](../ansible/roles/general/windows_updates/tasks/main.yml)                | Perform **_Windows updates_**                                                |
+
+### Domain
+
+|                                              Role                                               | Description                                                             |
+| :---------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------- |
+|           [`domain_creation`](../ansible/roles/domain/domain_creation/tasks/main.yml)           | Create a new **_AD forest_** along with its **_domains_** and **_OUs_** |
+| [`domain_user_configuration`](../ansible/roles/domain/domain_user_configuration/tasks/main.yml) | Manage **_domain user accounts_** and **_passwords_**                   |
+|         [`linux_domain_join`](../ansible/roles/domain/linux_domain_join/tasks/main.yml)         | **_Join Linux hosts_** to the **_domain_**                              |
+|       [`windows_domain_join`](../ansible/roles/domain/windows_domain_join/tasks/main.yml)       | **_Join Windows hosts_** to the **_domain_**                            |
+
+### Hypervisors
+
+|                                             Role                                             | Description                                                |
+| :------------------------------------------------------------------------------------------: | :--------------------------------------------------------- |
+|    [`esxi_vm_deployment`](../ansible/roles/hypervisors/esxi_vm_deployment/tasks/main.yml)    | Deploy **_VMs_** on **_ESXi host_**                        |
+| [`hyper-v_configuration`](../ansible/roles/hypervisors/hyper-v_configuration/tasks/main.yml) | Install **_Hyper-V_** and configure **_virtual switches_** |
+| [`hyper-v_vm_deployment`](../ansible/roles/hypervisors/hyper-v_vm_deployment/tasks/main.yml) | Deploy **_VMs_** on **_Hyper-V host_**                     |
+
+### Services
+
+|                                                 Role                                                  | Description                                                                                                                               |
+| :---------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
+|      [`adguardhome_deployment`](../ansible/roles/services/adguardhome_deployment/tasks/main.yml)      | Configure **_AdGuard Home_** as a **_self-hosted DNS server_** and **_network-wide ad blocker_**                                          |
+|        [`authentik_deployment`](../ansible/roles/services/authentik_deployment/tasks/main.yml)        | Configure **_Authentik_** as a **_centralized identity provider_** and **_SSO gateway_** for **_authentication_** and **_authorization_** |
+|        [`docker_configuration`](../ansible/roles/services/docker_configuration/tasks/main.yml)        | Configure **_Docker_** settings                                                                                                           |
+|        [`nextcloud_deployment`](../ansible/roles/services/nextcloud_deployment/tasks/main.yml)        | Configure **_Nextcloud_** as a **_self-hosted file manager_**                                                                             |
+|          [`grafana_deployment`](../ansible/roles/services/grafana_deployment/tasks/main.yml)          | Configure **_Grafana_** as a **_analytics platform_** for **_dashboards_** and **_data virtualization_**                                  |
+|   [`home_assistant_deployment`](../ansible/roles/services/home_assistant_deployment/tasks/main.yml)   | Configure **_Home Assistant_** as a **_centralized home automation platform_** for **_smart device integration_**                         |
+|         [`homepage_deployment`](../ansible/roles/services/homepage_deployment/tasks/main.yml)         | Configure **_Homepage_** as a **_centralized service dashboard_** for **_infrastructure monitoring_** and **_service discovery_**         |
+|              [`iis_deployment`](../ansible/roles/services/iis_deployment/tasks/main.yml)              | Install and configure **_Internet Information Services_** (**_IIS_**)                                                                     |
+|           [`immich_deployment`](../ansible/roles/services/immich_deployment/tasks/main.yml)           | Configure **_Immich_** as a **_self-hosted photo_** and **_video management solution_** for **_media backup_**                            |
+|         [`jellyfin_deployment`](../ansible/roles/services/jellyfin_deployment/tasks/main.yml)         | Configure **_Jellyfin_** as a **_self-hosted media server_**                                                                              |
+|           [`motion_deployment`](../ansible/roles/services/motion_deployment/tasks/main.yml)           | Configure **_Motion_** as a **_self-hosted security camera system_**                                                                      |
+|    [`node_exporter_deployment`](../ansible/roles/services/node_exporter_deployment/tasks/main.yml)    | Configure **_Node Exporter_** as a **_metrics collector_** for **_Prometheus monitoring_** on **_Linux hosts_**                           |
+|              [`npm_deployment`](../ansible/roles/services/npm_deployment/tasks/main.yml)              | Configure **_Nginx Proxy Manager_** as a **_reverse proxy_** for **_host forwarding_**                                                    |
+|        [`portainer_deployment`](../ansible/roles/services/portainer_deployment/tasks/main.yml)        | Configure **_Portainer_** as a **_container management platform_** for **_Docker environments_**                                          |
+|       [`prometheus_deployment`](../ansible/roles/services/prometheus_deployment/tasks/main.yml)       | Configure **_Prometheus_** as a **_time-series database_** for **_metrics collection_**                                                   |
+|    [`snmp_exporter_deployment`](../ansible/roles/services/snmp_exporter_deployment/tasks/main.yml)    | Configure **_SNMP Exporter_** as a **_metrics collector_** from **_network devices_** and **_ESXi host_** via **_SNMP_**                  |
+|        [`tailscale_deployment`](../ansible/roles/services/tailscale_deployment/tasks/main.yml)        | Configure **_Tailscale_** as a **_mesh VPN service_** for **_secure remote access_**                                                      |
+| [`windows_exporter_deployment`](../ansible/roles/services/windows_exporter_deployment/tasks/main.yml) | Configure **_Windows Exporter_** as a **_metrics collector_** for **_Prometheus monitoring_** on **_Windows hosts_**                      |
+
+## Prerequisites
+
+1.  **_[OpenSSH Server](https://github.com/PowerShell/Win32-OpenSSH/releases/latest)_** installed on the **_targeted hosts_**. Alternatively, this can be installed via **_PowerShell_**:
+
+    ```powershell
+    Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+    ```
+
+2.  **_SSH Service_** enabled on the targeted hosts:
+
+    ```powershell
+    Start-Service sshd
+    Set-Service -Name sshd -StartupType 'Automatic'
+    ```
+
+3.  **_SSH_** allowed through the **_firewall_**:
+
+    ```powershell
+    New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22 -Profile Any
+    ```
+
+> [!NOTE]
+>
+> - The steps above apply strictly to **_Windows_**/**_Windows Server_** targets.
+> - **_Linux_** and **_ESXi_** distributions typically include **_pre-installed SSH_** services.
+
+> [!TIP]
+> If the automated **_[khangvum/answer-files](https://github.com/khangvum/answer-files)_** are utilized for OS deployment, **_SSH_** is **_already provisioned_** and **_configured_** during the initial installation.
+
+4.  **_SSH connection_** verified **_once_** from the controller to each host:
+
+    ```bash
+    ssh administrator@"<IP_ADDRESS>"
+    ```
+
+    **_Accept the host key_** on first connection by typing `yes` when prompted.
+
+## Configuration Setup
+
+1. **Update the inventory and variable files:**
+
+- [`inventory.yml`](../ansible/inventory.template.yml): Defines the **_target hosts_**.
+- **Docker variables:**
+
+  |                                        File                                         | Description                                                                                                       |
+  | :---------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------- |
+  |        [`iam_var.yml`](../ansible/variables/docker_var/iam_var.template.yml)        | Define **_Authentik settings_** for **_centralized identity provider_** and **_SSO gateway_**                     |
+  |      [`media_var.yml`](../ansible/variables/docker_var/media_var.template.yml)      | Define **_Immich_** and **_Jellyfin settings_** for **_self-hosted media server_**                                |
+  | [`management_var.yml`](../ansible/variables/docker_var/management_var.template.yml) | Define **_Portainer_**, **_Home Assistant_**, and **_Homepage settings_** for **_centralized service dashboard_** |
+  | [`monitoring_var.yml`](../ansible/variables/docker_var/monitoring_var.template.yml) | Define **_Grafana_**, **_Prometheus_**, and **_Node Exporter settings_** for **_monitoring stack_**               |
+  |        [`nas_var.yml`](../ansible/variables/docker_var/nas_var.template.yml)        | Define **_Nextcloud settings_** for **_self-hosted file manager_**                                                |
+  |   [`security_var.yml`](../ansible/variables/docker_var/security_var.template.yml)   | Define **_Motion settings_** for **_self-hosted security camera system_**                                         |
+  |        [`vpn_var.yml`](../ansible/variables/docker_var/vpn_var.template.yml)        | Define **_Tailscale_** and **_Nginx Proxy Manager settings_** for **_Mesh VPN service_**                          |
+
+- **Domain variables:**
+
+  |                                    File                                     | Description                            |
+  | :-------------------------------------------------------------------------: | :------------------------------------- |
+  | [`domain_var.yml`](../ansible/variables/domain_var/domain_var.template.yml) | Defines the **_domain configuration_** |
+  |   [`user_var.yml`](../ansible/variables/domain_var/user_var.template.yml)   | Defines all **_domain users_**         |
+
+- **Hypervisor variables:**
+
+  |                                      File                                      | Description                                                 |
+  | :----------------------------------------------------------------------------: | :---------------------------------------------------------- |
+  |    [`esxi_vm_var.yml`](../ansible/variables/hypervisor_var/esxi_vm_var.yml)    | Defines **_ESXi VMs_** and their **_specifications_**       |
+  | [`hyper-v_vm_var.yml`](../ansible/variables/hypervisor_var/hyper-v_vm_var.yml) | Define the **_Hyper-V VMs_** and their **_specifications_** |
+
+- **OS variables:**
+
+  |                                   File                                    | Description                              |
+  | :-----------------------------------------------------------------------: | :--------------------------------------- |
+  |    [`esxi_var.yml`](../ansible/variables/os_var/esxi_var.template.yml)    | Defines **_ESXi-specific variables_**    |
+  |   [`linux_var.yml`](../ansible/variables/os_var/linux_var.template.yml)   | Defines **_Linux-specific variables_**   |
+  | [`windows_var.yml`](../ansible/variables/os_var/windows_var.template.yml) | Defines **_Windows-specific variables_** |
+
+2.  **Start the Ansible environment:**
+
+    ```bash
+    docker compose up -d
+    ```
+
+3.  **Access the running Ansible container:**
+
+    ```bash
+    docker exec -it ansible_service /bin/bash
+    ```
+
+4.  **Execute the playbook to apply the settings:**
+
+    ```bash
+    ansible-playbook site.yml -i inventory.yml
+    ```
+
+> [!TIP]
+> Use `-t` option to selectively run specific plays:
+>
+> ```bash
+> ansible-playbook site.yml -i inventory.yml -t system_information
+> ```
+
+## Ansible Vault Commands
+
+When managing **_sensitive credentials_** or **_variables_** in the homelab configuration, consider using `ansible-vault`.
+
+### 1. Create an Encrypted File
+
+To create a new encrypted file:
+
+```bash
+ansible-vault create "<VAULT_FILE_PATH>"
+```
+
+### 2. View an Encrypted File
+
+To view the contents of an encrypted file without modifying it:
+
+```bash
+ansible-vault view "<VAULT_FILE_PATH>"
+```
+
+### 3. Edit an Encrypted File Interactively
+
+To edit an encrypted file directly without manually decrypting, modifying, and re-encrypting it:
+
+```bash
+ansible-vault edit "<VAULT_FILE_PATH>"
+```
+
+### 4. Encrypt an Existing Plaintext File
+
+To secure an unencrypted file:
+
+```bash
+ansible-vault encrypt "<VAULT_FILE_PATH>"
+```
+
+### 5. Decrypt an Existing Encrypted File
+
+To permanently return an encrypted file to plaintext:
+
+```bash
+ansible-vault decrypt "<VAULT_FILE_PATH>"
+```
+
+## Playbook Execution with Ansible Vault
+
+When the inventory or variable files are **_encrypted_**, Ansible requires a **_vault password_** to parse and run them successfully. Execution can be handled using one of the following methods:
+
+### Option 1: Manual Password Prompt
+
+To **_prompt interactively_** for the **_vault password_** at runtime, the `--ask-vault-pass` flag is appended to the execution command:
+
+```bash
+ansible-playbook site.yml -i inventory.yml --ask-vault-pass
+```
+
+### Option 2: Automated Password File
+
+To **_bypass interactive prompts_** during automated runs or continuous deployment pipelines, a **_local password file_** can be referenced directly:
+
+```bash
+ansible-playbook site.yml -i inventory.yml --vault-password-file "<PASSWORD_FILE_PATH>"
+```
