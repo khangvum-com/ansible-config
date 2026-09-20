@@ -62,6 +62,22 @@
     mode: '0644'
   register: docker_compose_file
 
+- name: Nextcloud Local Servers Configuration File Creation
+  ansible.builtin.copy:
+    content: |
+      <?php
+      $CONFIG = array (
+        'allow_local_remote_servers' => [
+          'authentik.{{ domain_name }}',
+          '{{ hostvars["KVM-VPN01"].ansible_host }}',
+        ],
+      );
+    dest: "{{ nextcloud_parent_dir }}/html/config/local-servers.config.php"
+    owner: "{{ www_data_uid }}"
+    group: "{{ www_data_gid }}"
+    mode: '0644'
+  register: nextcloud_local_servers_config
+
 - name: Nextcloud Deployment
   community.docker.docker_compose_v2:
     project_src: "{{ nextcloud_parent_dir }}"
