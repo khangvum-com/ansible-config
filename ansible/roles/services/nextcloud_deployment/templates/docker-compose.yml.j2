@@ -32,6 +32,8 @@ services:
   app:
     image: docker.io/library/nextcloud:{{ nextcloud_version }}
     restart: unless-stopped
+    extra_hosts:
+      - "authentik.{{ domain_name }}:{{ hostvars['KVM-VPN01'].ansible_host }}"
     ports:
       - "8080:80"
     environment:
