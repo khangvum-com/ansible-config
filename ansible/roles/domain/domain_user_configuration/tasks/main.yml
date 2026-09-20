@@ -10,7 +10,7 @@
     display_name: "{{ item.display_name | default(omit) }}"
     upn: "{{ item.upn | default(omit) }}"
     email: "{{ item.email | default(omit) }}"
-    path: "{{ item.path | default('OU=Administrators,OU=Accounts,DC=khangvum,DC=lab') }}"
+    path: "{{ item.path | default('OU=Administrators,OU=Accounts,DC=khangvum,DC=com') }}"
     password: "{{ item.password }}"
     update_password: when_changed
     password_never_expires: "{{ item.password_never_expires }}"
