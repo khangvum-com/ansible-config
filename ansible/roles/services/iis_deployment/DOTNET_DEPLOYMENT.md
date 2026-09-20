@@ -39,7 +39,7 @@ A **_web application deployment_** process for Windows, leveraging **_Internet I
 
   ```json
   "ConnectionStrings": {
-    "DefaultConnection": "Server=KVM-DB01.khangvum.lab;Database=INFO3181Casestudy;Trusted_Connection=True;TrustServerCertificate=True;"
+    "DefaultConnection": "Server=KVM-DB01.khangvum.com;Database=INFO3181Casestudy;Trusted_Connection=True;TrustServerCertificate=True;"
   }
   ```
 
@@ -51,14 +51,14 @@ A **_web application deployment_** process for Windows, leveraging **_Internet I
 
 ## 4. IIS Deployment
 
-- **_Copy_** the content of **_`publish` folder_** into **_`C:\inetpub\wwwroot\info3181casestudy.khangvum.lab`_** on **_`KVM-WEB01`_**.
+- **_Copy_** the content of **_`publish` folder_** into **_`C:\inetpub\wwwroot\info3181casestudy.khangvum.com`_** on **_`KVM-WEB01`_**.
 - Open **_Internet Information Services (IIS) Manager_** (`inetmgr`), right-click **Sites** > **Add Website...**:
 
   |     Property      | Value                                                                                                     |
   | :---------------: | --------------------------------------------------------------------------------------------------------- |
   |   **Site name**   | `INFO-3181 Casestudy`                                                                                     |
-  | **Physical path** | `C:\inetpub\wwwroot\info3181casestudy.khangvum.lab`                                                       |
-  |    **Binding**    | Type: `http`<br>IP address: `All Unassigned`<br>Port: `80`<br>Host name: `info3181casestudy.khangvum.lab` |
+  | **Physical path** | `C:\inetpub\wwwroot\info3181casestudy.khangvum.com`                                                       |
+  |    **Binding**    | Type: `http`<br>IP address: `All Unassigned`<br>Port: `80`<br>Host name: `info3181casestudy.khangvum.com` |
 
 - Configure **_application pool_**:
   - In **IIS Manager** > **Application Pools**, locate the site’s pool (_e.g.,_ `info3181casestudy`).
@@ -72,7 +72,7 @@ A **_web application deployment_** process for Windows, leveraging **_Internet I
 
 - On the **_DNS server_** (_e.g.,_ **_`KVM-DC01`_**), open **_DNS Manager_** (`dnsmgmt.msc`).
 - Add a new **_A record_**:
-  - Navigate to **Forward Lookup Zone** > the domain (_e.g.,_ `khangvum.lab`).
+  - Navigate to **Forward Lookup Zone** > the domain (_e.g.,_ `khangvum.com`).
   - Right click > **New Host (A or AAAA)...**:
 
     |    Property    | Value                                |
@@ -86,12 +86,12 @@ A **_web application deployment_** process for Windows, leveraging **_Internet I
 - Verify DNS resolution:
 
   ```powershell
-  nslookup info3181casestudy.khangvum.lab
+  nslookup info3181casestudy.khangvum.com
   ```
 
 ## 6. Site Access Test
 
-Once everything is configured, browse to `http://info3181casestudy.khangvum.lab`.
+Once everything is configured, browse to `http://info3181casestudy.khangvum.com`.
 
 > [!CAUTION]
 > Instead of running the application pool under a domain admin like `KHANGVUM\Administrator`, use a **_dedicated service account_** for **_security_**:

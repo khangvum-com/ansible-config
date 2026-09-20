@@ -21,10 +21,10 @@ On `KVM-WEB01`:
   npm install pm2 -g
   ```
 
-- Start the application from the **_project root_** (_e.g.,_ `C:\inetpub\wwwroot\itinder.khangvum.lab`):
+- Start the application from the **_project root_** (_e.g.,_ `C:\inetpub\wwwroot\itinder.khangvum.com`):
 
   ```powershell
-  pm2 start server.js --name "itinder.khangvum.lab"
+  pm2 start server.js --name "itinder.khangvum.com"
   ```
 
 - Install and configure the **_Windows service helper_** to ensure the application **_starts automatically on boot_**:
@@ -51,18 +51,18 @@ On `KVM-WEB01`:
 > [!NOTE]
 > This command **_compiles the React assets_** and **_synchronizes_** the `/client/dist` contents with the `/server/public` directory.
 
-- **_Copy_** the content of the **_`/server` folder_** into **_`C:\inetpub\wwwroot\itinder.khangvum.lab`_** on **_`KVM-WEB01`_**.
+- **_Copy_** the content of the **_`/server` folder_** into **_`C:\inetpub\wwwroot\itinder.khangvum.com`_** on **_`KVM-WEB01`_**.
 - Open **_Internet Information Services (IIS) Manager_** (`inetmgr`), right-click **Sites** > **Add Website...**:
 
   |     Property      | Value                                                                                           |
   | :---------------: | ----------------------------------------------------------------------------------------------- |
   |   **Site name**   | `ITinder`                                                                                       |
-  | **Physical path** | `C:\inetpub\wwwroot\itinder.khangvum.lab`                                                       |
-  |    **Binding**    | Type: `http`<br>IP address: `All Unassigned`<br>Port: `80`<br>Host name: `itinder.khangvum.lab` |
+  | **Physical path** | `C:\inetpub\wwwroot\itinder.khangvum.com`                                                       |
+  |    **Binding**    | Type: `http`<br>IP address: `All Unassigned`<br>Port: `80`<br>Host name: `itinder.khangvum.com` |
 
 ## 4. IIS Reverse Proxy Configuration
 
-To allow IIS to server as the **_gateway_** for the Node.js application, a **_`web.config`_** file must be configured within the site's **_physical path_** (_e.g.,_ `C:\inetpub\wwwroot\itinder.khangvum.lab`) to direct IIS to handle **_client-side routing_** for the React front end while proxying backend requests to the Node.js process:
+To allow IIS to server as the **_gateway_** for the Node.js application, a **_`web.config`_** file must be configured within the site's **_physical path_** (_e.g.,_ `C:\inetpub\wwwroot\itinder.khangvum.com`) to direct IIS to handle **_client-side routing_** for the React front end while proxying backend requests to the Node.js process:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -93,7 +93,7 @@ To allow IIS to server as the **_gateway_** for the Node.js application, a **_`w
 
 - On the **_DNS server_** (_e.g.,_ **_`KVM-DC01`_**), open **_DNS Manager_** (`dnsmgmt.msc`).
 - Add a new **_A record_**:
-  - Navigate to **Forward Lookup Zone** > the domain (_e.g.,_ `khangvum.lab`).
+  - Navigate to **Forward Lookup Zone** > the domain (_e.g.,_ `khangvum.com`).
   - Right click > **New Host (A or AAAA)...**:
 
     |    Property    | Value                                |
@@ -103,4 +103,4 @@ To allow IIS to server as the **_gateway_** for the Node.js application, a **_`w
 
 ## 6. Site Access Test
 
-Once everything is configured, browse to `http://itinder.khangvum.lab`.
+Once everything is configured, browse to `http://itinder.khangvum.com`.

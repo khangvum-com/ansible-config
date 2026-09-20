@@ -9,7 +9,7 @@ An **_Ansible role_** facilitates the **_identity provider deployment_** process
 - Open **_PowerShell as Administrator_** and execute:
 
   ```powershell
-  New-SelfSignedCertificate -DnsName "kvm-dc01.khangvum.lab", "kvm-dc02.khangvum.lab" -CertStoreLocation "cert:\LocalMachine\My" -NotAfter (Get-Date).AddYears(5)
+  New-SelfSignedCertificate -DnsName "kvm-dc01.khangvum.com", "kvm-dc02.khangvum.com" -CertStoreLocation "cert:\LocalMachine\My" -NotAfter (Get-Date).AddYears(5)
   ```
 
 - Open **_Certificate Manager_** (`certlm.msc`):
@@ -54,8 +54,8 @@ An **_Ansible role_** facilitates the **_identity provider deployment_** process
 
   |             Property             | Value                                                                 |
   | :------------------------------: | --------------------------------------------------------------------- |
-  |             **Name**             | `khangvum.lab`                                                        |
-  |          **Server URI**          | `ldaps://kvm-dc01.khangvum.lab:636,ldaps://kvm-dc02.khangvum.lab:636` |
+  |             **Name**             | `khangvum.com`                                                        |
+  |          **Server URI**          | `ldaps://kvm-dc01.khangvum.com:636,ldaps://kvm-dc02.khangvum.com:636` |
   | **TLS Verification Certificate** | Select `AD-SelfSigned-Root`                                           |
   |           **Bind CN**            | `CN=Administrator,CN=Users,DC=khangvum,DC=com`                        |
   |        **Bind Password**         | The password of the account specified in **_Bind CN_**                |

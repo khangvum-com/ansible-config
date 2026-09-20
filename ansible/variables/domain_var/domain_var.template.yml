@@ -8,7 +8,7 @@ ntp_servers: "0.pool.ntp.org,0x1 1.pool.ntp.org,0x1"
 
 # OU Structure
 # ---------------------------------------------
-# khangvum.lab
+# khangvum.com
 # ├── OU=Domain Controllers (Default)
 # ├── OU=Accounts
 # │   ├── OU=Administrators
