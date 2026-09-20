@@ -14,7 +14,7 @@ A comprehensive guide to **_integrating Authentik LDAP_** with a **_Jellyfin_** 
   |    **Name**     | `Jellyfin - LDAP`                                     |
   |  **Bind Flow**  | `ldap-authentication-flow (LDAP Authentication Flow)` |
   | **Unbind Flow** | `default-invalidation-flow (Logout)`                  |
-  |   **Base DN**   | `DC=khangvum,DC=lab`                                  |
+  |   **Base DN**   | `DC=khangvum,DC=com`                                  |
   | **Certificate** | `authentik Self-signed Certificate`                   |
 
 ### Application Setup
@@ -81,9 +81,9 @@ Once restarted, click on the **_LDAP-Auth_** plugin icon in the installed plugin
 |           **LDAP Port**            | `636`                                                    |
 |          **Secure LDAP**           | `CHECKED`                                                |
 |   **Skip SSL/TLS Verification**    | `CHECKED`                                                |
-|         **LDAP Bind User**         | `cn=akadmin,ou=users,dc=khangvum,dc=lab`                 |
+|         **LDAP Bind User**         | `cn=akadmin,ou=users,dc=khangvum,DC=com`                 |
 |    **LDAP Bind User Password**     | (`akadmin`'s password)                                   |
-|   **LDAP Base DN for searches:**   | `dc=khangvum,dc=lab`                                     |
+|   **LDAP Base DN for searches:**   | `dc=khangvum,DC=com`                                     |
 |       **LDAP Search Filter**       | `(&(objectClass=user))`                                  |
 |     **LDAP Search Attributes**     | `sAMAccountName, cn, mail, displayName`                  |
 |       **LDAP Uid Attribute**       | `sAMAccountName`                                         |

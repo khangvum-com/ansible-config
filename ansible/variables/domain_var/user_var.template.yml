@@ -2,7 +2,7 @@
 # Domain administrator configuration
 domain_admin_account_list:
   - name: Administrator
-    path: "CN=Users,DC=khangvum,DC=lab"
+    path: "CN=Users,DC=khangvum,DC=com"
     password: {{ PASSWORD }}
     password_never_expires: true
     state: present
@@ -10,9 +10,9 @@ domain_admin_account_list:
     group: Domain Admins
   - name: SAD Khang
     display_name: SAD Khang
-    upn: SAD_Khang@khangvum.lab
-    email: SAD_Khang@khangvum.lab
-    path: "OU=Administrators,OU=Accounts,DC=khangvum,DC=lab"
+    upn: SAD_Khang@khangvum.com
+    email: SAD_Khang@khangvum.com
+    path: "OU=Administrators,OU=Accounts,DC=khangvum,DC=com"
     password: {{ PASSWORD }}
     password_never_expires: true
     state: present
@@ -28,9 +28,9 @@ domain_user_account_list:
     surname: Vu
     display_name: Khang Vu
     sam_account_name: kvu
-    upn: kvu@khangvum.lab
-    email: kvu@khangvum.lab
-    path: "CN=Users,DC=khangvum,DC=lab"
+    upn: kvu@khangvum.com
+    email: kvu@khangvum.com
+    path: "CN=Users,DC=khangvum,DC=com"
     password: {{ PASSWORD }}
     password_never_expires: true
     state: present

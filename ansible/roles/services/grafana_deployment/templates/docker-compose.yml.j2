@@ -17,15 +17,15 @@ services:
       GF_AUTH_GENERIC_OAUTH_CLIENT_ID: {{ grafana_authentik_client_id }}
       GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: {{ grafana_authentik_client_secret }}
       GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email entitlements"
-      GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://authentik.{{ public_domain_name }}/application/o/authorize/"
-      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://authentik.{{ public_domain_name }}/application/o/token/"
-      GF_AUTH_GENERIC_OAUTH_API_URL: "https://authentik.{{ public_domain_name }}/application/o/userinfo/"
-      GF_AUTH_SIGNOUT_REDIRECT_URL: "https://authentik.{{ public_domain_name }}/application/o/grafana/end-session/"
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://authentik.{{ domain_name }}/application/o/authorize/"
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://authentik.{{ domain_name }}/application/o/token/"
+      GF_AUTH_GENERIC_OAUTH_API_URL: "https://authentik.{{ domain_name }}/application/o/userinfo/"
+      GF_AUTH_SIGNOUT_REDIRECT_URL: "https://authentik.{{ domain_name }}/application/o/grafana/end-session/"
       # Explicitly allow Basic Auth for API calls:
       GF_AUTH_BASIC_ENABLED: "true"
       # Optionally enable auto-login (Bypasses Grafana login screen)
       GF_AUTH_OAUTH_AUTO_LOGIN: "false"
       # Required if Grafana is running behind a reverse proxy
-      GF_SERVER_ROOT_URL: "https://grafana.{{ public_domain_name }}"
+      GF_SERVER_ROOT_URL: "https://grafana.{{ domain_name }}"
 volumes:
   grafana-storage: {}

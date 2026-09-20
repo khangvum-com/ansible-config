@@ -18,7 +18,7 @@
     name: Default Web Site
     state: stopped
 
-# info3181casestudy.khangvum.lab
+# info3181casestudy.khangvum.com
 - name: info3181casestudy Application Pool Creation
   microsoft.iis.web_app_pool:
     name: info3181casestudy
@@ -32,11 +32,11 @@
       set:
         - ip: '*'
           port: 80
-          hostname: info3181casestudy.khangvum.lab
-    physical_path: C:\inetpub\wwwroot\info3181casestudy.khangvum.lab
+          hostname: info3181casestudy.khangvum.com
+    physical_path: C:\inetpub\wwwroot\info3181casestudy.khangvum.com
     application_pool: info3181casestudy
 
-# itinder.khangvum.lab
+# itinder.khangvum.com
 - name: itinder Application Pool Creation
   microsoft.iis.web_app_pool:
     name: itinder
@@ -50,6 +50,6 @@
       set:
         - ip: '*'
           port: 80
-          hostname: itinder.khangvum.lab
-    physical_path: C:\inetpub\wwwroot\itinder.khangvum.lab
+          hostname: itinder.khangvum.com
+    physical_path: C:\inetpub\wwwroot\itinder.khangvum.com
     application_pool: itinder

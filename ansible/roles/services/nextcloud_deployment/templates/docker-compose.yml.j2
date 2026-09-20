@@ -42,10 +42,10 @@ services:
       REDIS_HOST: redis
       NEXTCLOUD_ADMIN_USER: "{{ ansible_user }}"
       NEXTCLOUD_ADMIN_PASSWORD: "{{ ansible_password }}"
-      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.{{ public_domain_name }} nextcloud.{{ domain_name }} {{ hostvars['KVM-NAS01'].ansible_host }} localhost 127.0.0.1"
-      OVERWRITES: "nextcloud.{{ public_domain_name }}"
+      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.{{ domain_name }} nextcloud.{{ domain_name }} {{ hostvars['KVM-NAS01'].ansible_host }} localhost 127.0.0.1"
+      OVERWRITES: "nextcloud.{{ domain_name }}"
       OVERWRITEPROTOCOL: "https"
-      OVERWRITECLIURL: "https://nextcloud.{{ public_domain_name }}"
+      OVERWRITECLIURL: "https://nextcloud.{{ domain_name }}"
       OVERWRITECONDADDR: "^.*$"
       TRUSTED_PROXIES: "172.16.0.0/12"
     volumes:

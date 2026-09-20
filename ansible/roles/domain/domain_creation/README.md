@@ -1,6 +1,6 @@
 # Active Directory Domain Creation and Replication
 
-A **_domain infrastructure_** setup for the `khangvum.lab` forest, which involves promoting `KVM-DC01` as the **_primary domain controller_** (**_PDC_**), joining `KVM-DC02` as a **_secondary domain controller_**, and ensuring **_multi-master replication_** across the environment.
+A **_domain infrastructure_** setup for the `khangvum.com` forest, which involves promoting `KVM-DC01` as the **_primary domain controller_** (**_PDC_**), joining `KVM-DC02` as a **_secondary domain controller_**, and ensuring **_multi-master replication_** across the environment.
 
 ## Domain Controller Roles
 

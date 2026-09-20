@@ -10,4 +10,4 @@ services:
       - ./config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS=homepage.{{ public_domain_name }},homepage.{{ domain_name }},{{ hostvars['KVM-MGMT01'].ansible_host }}:3000,localhost,127.0.0.1
+      - HOMEPAGE_ALLOWED_HOSTS=homepage.{{ domain_name }},homepage.{{ domain_name }},{{ hostvars['KVM-MGMT01'].ansible_host }}:3000,localhost,127.0.0.1

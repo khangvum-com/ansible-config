@@ -1,6 +1,5 @@
 ---
 domain_name: {{ DOMAIN_NAME }}
-public_domain_name: {{ PUBLIC_DOMAIN_NAME }}
 domain_admin_user: {{ DOMAIN_ADMIN_USER }}
 domain_admin_password: {{ DOMAIN_ADMIN_PASSWORD }}
 safe_mode_password: {{ SAFE_MODE_PASSWORD }}
@@ -9,7 +8,7 @@ ntp_servers: "0.pool.ntp.org,0x1 1.pool.ntp.org,0x1"
 
 # OU Structure
 # ---------------------------------------------
-# khangvum.lab
+# khangvum.com
 # ├── OU=Domain Controllers (Default)
 # ├── OU=Accounts
 # │   ├── OU=Administrators
@@ -30,59 +29,59 @@ ous:
   # OU=Accounts
   - name: "Accounts"
     description: "Organizational Unit for Accounts"
-    path: "DC=khangvum,DC=lab"
+    path: "DC=khangvum,DC=com"
   # ├── OU=Administrators
   - name: "Administrators"
     description: "Organizational Unit for Administrators Accounts"
-    path: "OU=Accounts,DC=khangvum,DC=lab"
+    path: "OU=Accounts,DC=khangvum,DC=com"
   # └── OU=Users
   - name: "Users"
     description: "Organizational Unit for Users Accounts"
-    path: "OU=Accounts,DC=khangvum,DC=lab"
+    path: "OU=Accounts,DC=khangvum,DC=com"
   #     ├── OU=AUS
   - name: "AUS"
     description: "Organizational Unit for Australia Office Users"
-    path: "OU=Users,OU=Accounts,DC=khangvum,DC=lab"
+    path: "OU=Users,OU=Accounts,DC=khangvum,DC=com"
   #     ├── OU=CAN
   - name: "CAN"
     description: "Organizational Unit for Canada Office Users"
-    path: "OU=Users,OU=Accounts,DC=khangvum,DC=lab"
+    path: "OU=Users,OU=Accounts,DC=khangvum,DC=com"
   #     └── OU=VIE
   - name: "VIE"
     description: "Organizational Unit for Vietnam Office Users"
-    path: "OU=Users,OU=Accounts,DC=khangvum,DC=lab"
+    path: "OU=Users,OU=Accounts,DC=khangvum,DC=com"
   # OU=Devices
   - name: "Devices"
     description: "Organizational Unit for Devices"
-    path: "DC=khangvum,DC=lab"
+    path: "DC=khangvum,DC=com"
   # ├── OU=Workstations
   - name: "Workstations"
     description: "Organizational Unit for Workstations"
-    path: "OU=Devices,DC=khangvum,DC=lab"
+    path: "OU=Devices,DC=khangvum,DC=com"
   # └── OU=Servers
   - name: "Servers"
     description: "Organizational Unit for Servers"
-    path: "OU=Devices,DC=khangvum,DC=lab"
+    path: "OU=Devices,DC=khangvum,DC=com"
   #     ├── OU=Containers
   - name: "Containers"
     description: "Organizational Unit for Container Hosts"
-    path: "OU=Servers,OU=Devices,DC=khangvum,DC=lab"
+    path: "OU=Servers,OU=Devices,DC=khangvum,DC=com"
   #     ├── OU=Databases
   - name: "Databases"
     description: "Organizational Unit for Database Servers"
-    path: "OU=Servers,OU=Devices,DC=khangvum,DC=lab"
+    path: "OU=Servers,OU=Devices,DC=khangvum,DC=com"
   #     ├── OU=IIS
   - name: "IIS"
     description: "Organizational Unit for IIS Servers"
-    path: "OU=Servers,OU=Devices,DC=khangvum,DC=lab"
+    path: "OU=Servers,OU=Devices,DC=khangvum,DC=com"
   #     └── OU=Infrastructure
   - name: "Infrastructure"
     description: "Organizational Unit for Infrastructure Servers"
-    path: "OU=Servers,OU=Devices,DC=khangvum,DC=lab"
+    path: "OU=Servers,OU=Devices,DC=khangvum,DC=com"
 
 device_ou_dict:
-  workstations: 'OU=Workstations,OU=Devices,DC=khangvum,DC=lab'
-  containers: 'OU=Containers,OU=Servers,OU=Devices,DC=khangvum,DC=lab'
-  databases: 'OU=Databases,OU=Servers,OU=Devices,DC=khangvum,DC=lab'
-  webs: 'OU=IIS,OU=Servers,OU=Devices,DC=khangvum,DC=lab'
-  infrastructure: 'OU=Infrastructure,OU=Servers,OU=Devices,DC=khangvum,DC=lab'
+  workstations: 'OU=Workstations,OU=Devices,DC=khangvum,DC=com'
+  containers: 'OU=Containers,OU=Servers,OU=Devices,DC=khangvum,DC=com'
+  databases: 'OU=Databases,OU=Servers,OU=Devices,DC=khangvum,DC=com'
+  webs: 'OU=IIS,OU=Servers,OU=Devices,DC=khangvum,DC=com'
+  infrastructure: 'OU=Infrastructure,OU=Servers,OU=Devices,DC=khangvum,DC=com'
