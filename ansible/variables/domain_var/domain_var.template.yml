@@ -1,6 +1,5 @@
 ---
 domain_name: {{ DOMAIN_NAME }}
-public_domain_name: {{ PUBLIC_DOMAIN_NAME }}
 domain_admin_user: {{ DOMAIN_ADMIN_USER }}
 domain_admin_password: {{ DOMAIN_ADMIN_PASSWORD }}
 safe_mode_password: {{ SAFE_MODE_PASSWORD }}
