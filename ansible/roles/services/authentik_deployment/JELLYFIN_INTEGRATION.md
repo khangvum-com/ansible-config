@@ -50,7 +50,7 @@ A comprehensive guide to **_integrating Authentik LDAP_** with a **_Jellyfin_** 
       - "389:3389"
       - "636:6636"
     environment:
-      AUTHENTIK_HOST: https://authentik.khangvum.com
+      AUTHENTIK_HOST: http://server:9000
       AUTHENTIK_INSECURE: "false"
       AUTHENTIK_TOKEN: "{{ authentik_outpost_token }}"
     depends_on:

@@ -59,6 +59,50 @@
         status_code: 200
       register: npm_proxy_hosts
 
+    - name: npm Existing Certificates Retrieval
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:81/api/nginx/certificates"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ npm_api_token.json.token }}"
+        status_code: 200
+      register: npm_certificates
+
+    - name: npm SSL Certificate Setup
+      vars:
+        cert_match: "{{ npm_certificates.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:81/api/nginx/certificates"
+        method: POST
+        headers:
+          Authorization: "Bearer {{ npm_api_token.json.token }}"
+        body_format: json
+        body:
+          provider: "letsencrypt"
+          nice_name: "{{ item.name }}.{{ domain_name }}"
+          domain_names:
+            - "{{ item.name }}.{{ domain_name }}"
+          meta:
+            dns_challenge: true
+            dns_provider: "cloudflare"
+            dns_provider_credentials: "dns_cloudflare_api_token = {{ cloudflare_api_token }}"
+        status_code: [201, 500] # Sometimes API returns 500 if retrying while propagating, adjust status codes if necessary
+      loop: "{{ docker_services }}"
+      when: cert_match | length == 0 and (item.enable_ssl | default(true))
+      register: npm_cert_creation
+      until: npm_cert_creation.status == 201
+      retries: 5
+      delay: 10
+
+    - name: npm Refresh Certificates List
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:81/api/nginx/certificates"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ npm_api_token.json.token }}"
+        status_code: 200
+      register: npm_certificates_refreshed
+
     # Documentation: http://{{ VPN_IP_ADDRESS }}:81/api/schema
     #
     # curl -X POST http://192.168.0.133:81/api/nginx/proxy-hosts \
@@ -73,16 +117,16 @@
     #     "block_exploits": true,
     #     "allow_websocket_upgrade": true,
     #     "access_list_id": 0,
-    #     "certificate_id": 0,
-    #     "ssl_forced": false
+    #     "certificate_id": RESOLVED_CERT_ID,
+    #     "ssl_forced": true
     #   }'
     - name: npm Proxy Host Setup
       vars:
         current_match: "{{ npm_proxy_hosts.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
+        active_cert: "{{ npm_certificates_refreshed.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
+        resolved_cert_id: "{{ active_cert[0].id | int if active_cert | length > 0 else 0 }}"
       ansible.builtin.uri:
-        # url: "http://{{ ansible_host }}:81/api/nginx/proxy-hosts"
         url: http://{{ ansible_host }}:81/api/nginx/proxy-hosts{{ '/' + (current_match[0].id | string) if current_match | length > 0 else '' }}
-        # method: POST
         method: "{{ 'PUT' if current_match | length > 0 else 'POST' }}"
         headers:
           Authorization: "Bearer {{ npm_api_token.json.token }}"
@@ -97,8 +141,35 @@
             "block_exploits": true,
             "allow_websocket_upgrade": true,
             "access_list_id": 0,
-            "certificate_id": 0,
-            "ssl_forced": false
+            "certificate_id": {{ resolved_cert_id }},
+            "ssl_forced": {{ true if resolved_cert_id | int > 0 else false }}
+          }
+        status_code: [200, 201]
+      loop: "{{ docker_services }}"
+      register: npm_proxy_result
+    - name: npm Proxy Host Setup
+      vars:
+        current_match: "{{ npm_proxy_hosts.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
+        active_cert: "{{ npm_certificates_refreshed.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
+        resolved_cert_id: "{{ active_cert[0].id | int if active_cert | length > 0 else 0 }}"
+      ansible.builtin.uri:
+        url: http://{{ ansible_host }}:81/api/nginx/proxy-hosts{{ '/' + (current_match[0].id | string) if current_match | length > 0 else '' }}
+        method: "{{ 'PUT' if current_match | length > 0 else 'POST' }}"
+        headers:
+          Authorization: "Bearer {{ npm_api_token.json.token }}"
+        body_format: json
+        body: |
+          {
+            "domain_names": ["{{ item.name }}.{{ domain_name }}"],
+            "forward_scheme": "{{ item.forward_scheme | default('http') }}",
+            "forward_host": "{{ item.forward_host }}",
+            "forward_port": {{ item.forward_port }},
+            "caching_enabled": false,
+            "block_exploits": true,
+            "allow_websocket_upgrade": true,
+            "access_list_id": 0,
+            "certificate_id": {{ resolved_cert_id }},
+            "ssl_forced": {{ true if resolved_cert_id | int > 0 else false }}
           }
         status_code: [200, 201]
       loop: "{{ docker_services }}"
@@ -107,7 +178,7 @@
 - name: A-record for Tailscale Creation on Windows DNS Server (KVM-DC01)
   run_once: true
   delegate_to: KVM-DC01
-  vars: # To run on Windows host
+  vars:
     host_key_checking: False
     ansible_shell_type: cmd
     ansible_connection: ssh
