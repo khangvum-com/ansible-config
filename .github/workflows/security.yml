@@ -3,7 +3,8 @@ name: Security Scan
 on:
   push: # Trigger on pushes to any branch
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
 
 permissions:
   contents: read
