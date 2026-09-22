@@ -51,7 +51,7 @@
   when: item.host == computer_name
 
 - name: VM Autostart and Autostop Configuration
-  khangvum.hyperv.vm_boot_action:
+  khangvum.hyperv.vm_automatic_action:
     name: "{{ item.name }}"
     auto_start_action: "{{ item.autostart }}"
     auto_stop_action: "{{ item.autostop }}"
