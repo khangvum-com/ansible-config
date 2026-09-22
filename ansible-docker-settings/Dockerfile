@@ -32,7 +32,9 @@ RUN ansible-galaxy collection install --upgrade \
     community.general \
     community.windows \
     microsoft.ad \
+    microsoft.hyperv \
     microsoft.iis \
+    khangvum.hyperv \
     community.docker \
     community.vmware
 
