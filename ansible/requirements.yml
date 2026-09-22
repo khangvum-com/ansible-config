@@ -1,0 +1,11 @@
+---
+collections:
+  - name: ansible.windows
+  - name: community.general
+  - name: community.windows
+  - name: microsoft.ad
+  # - name: microsoft.hyperv
+  - name: microsoft.iis
+  - name: khangvum.hyperv
+  - name: community.docker
+  - name: vmware.vmware
