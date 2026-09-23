@@ -11,7 +11,7 @@ all:
           win_license_key: {{ WIN_SERVER_2025_DATACENTER_LICENSE_KEY }}
           v_switches:
             - name: "KVM-SRV01-SW01"
-              adapter: "Ethernet"
+              adapter: "LAN-1GbE-Onboard"
               ip: {{ SRV01_SW01_IP }}
             - name: "KVM-SRV01-SW02"
               adapter: "Wi-Fi"

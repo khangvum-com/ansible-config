@@ -23,39 +23,18 @@
     (win_hyper_v_installation is defined and win_hyper_v_installation.reboot_required | default(false))
 
 - name: Hyper-V Switch Create
-  ansible.windows.win_powershell:
-    script: |
-      $switchName = "{{ item.name }}"
-      $adapterName = "{{ item.adapter }}"
-      $existingSwitch = Get-VMSwitch -Name $switchName -ErrorAction SilentlyContinue
-
-      if (-not $existingSwitch) {
-          New-VMSwitch -Name $switchName -NetAdapterName $adapterName -AllowManagementOS $true -EnableIov $true
-          $Ansible.Changed = $true
-      } else {
-          $Ansible.Changed = $false
-      }
+  khangvum.hyperv.vswitch:
+    name: "{{ item.name }}"
+    net_adapter_names: 
+      - "{{ item.adapter }}"
+    switch_type: external
+    allow_management_os: true
+    enable_iov: true
+    state: present
   loop: "{{ v_switches }}"
   when: v_switches is defined
 
 - name: Default VM Location Update
-  ansible.windows.win_powershell:
-    script: |
-      $hyperVParentDir = "{{ hyper_v_parent_dir }}\"
-      Write-Output "HyperV parent dir: $hyperVParentDir"
-      Write-Host "HyperV parent dir: $hyperVParentDir"
-      $currentVMPath = (Get-VMHost).VirtualMachinePath
-      $currentVHDPath = (Get-VMHost).VirtualHardDiskPath
-
-      $changed = $false
-      if ($currentVMPath -ne $hyperVParentDir) {
-          Set-VMHost -VirtualMachinePath $hyperVParentDir
-          $changed = $true
-      }
-
-      if ($currentVHDPath -ne $hyperVParentDir) {
-          Set-VMHost -VirtualHardDiskPath $hyperVParentDir
-          $changed = $true
-      }
-      
-      $Ansible.Changed = $changed
+  khangvum.hyperv.host:
+    virtual_machine_path: "{{ hyper_v_parent_dir }}"
+    virtual_hard_disk_path: "{{ hyper_v_parent_dir }}"
