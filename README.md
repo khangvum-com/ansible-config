@@ -2,7 +2,11 @@
 
 An **_agentless configuration automation_** solution powered by **_Ansible_**, containerized with **_Docker_**. This setup simplifies **_Windows_**, **_Linux_**, and **_standalone ESXi_** management by leveraging **_idempotent configuration_** and **_Infrastructure as Code_** (**_IaC_**) principles across hypervisors and service nodes.
 
+[![Ansible Pipeline](https://github.com/khangvum-com/ansible-config/actions/workflows/ansible.yml/badge.svg)](https://github.com/khangvum-com/ansible-config/actions/workflows/ansible.yml)
+[![Security Scan](https://github.com/khangvum-com/ansible-config/actions/workflows/security.yml/badge.svg)](https://github.com/khangvum-com/ansible-config/actions/workflows/security.yml)
+
 ## Features
+
 
 - **_Agentless configuration management_** powered by **_Ansible_** over **_SSH_**.
 - **_Docker-based controller_** for environment consistency across platforms.
@@ -186,7 +190,7 @@ flowchart LR
 > - **_Linux_** and **_ESXi_** distributions typically include **_pre-installed SSH_** services.
 
 > [!TIP]
-> If the automated **_[khangvum/answer-files](https://github.com/khangvum/answer-files)_** are utilized for OS deployment, **_SSH_** is **_already provisioned_** and **_configured_** during the initial installation.
+> If the automated **_[khangvum-com/answer-files](https://github.com/khangvum-com/answer-files)_** are utilized for OS deployment, **_SSH_** is **_already provisioned_** and **_configured_** during the initial installation.
 
 4.  **_SSH connection_** verified **_once_** from the controller to each host:
 
