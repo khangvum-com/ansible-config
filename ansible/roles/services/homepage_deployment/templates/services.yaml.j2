@@ -89,16 +89,6 @@
 {% endfor %}
 
 - Management:
-  - Nextcloud:
-      icon: nextcloud.png
-      href: https://nextcloud.{{ public_domain_name }}
-      description: Self-hosted cloud storage & collaboration
-      siteMonitor: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}/status.php
-      widget:
-        type: nextcloud
-        url: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}
-        username: "{{ ansible_user }}"
-        password: "{{ ansible_password }}"
   - Jellyfin:
       icon: jellyfin.png
       href: https://jellyfin.{{ public_domain_name }}
@@ -114,6 +104,16 @@
         enableUser: true
         showEpisodeNumber: true
         expandOneStreamToTwoRows: true
+  - Nextcloud:
+      icon: nextcloud.png
+      href: https://nextcloud.{{ public_domain_name }}
+      description: Self-hosted cloud storage & collaboration
+      siteMonitor: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}/status.php
+      widget:
+        type: nextcloud
+        url: {{ nextcloud.forward_scheme | default('http') }}://{{ nextcloud.forward_host }}:{{ nextcloud.forward_port }}
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
 {% for env in portainer_environments %}
   - Portainer ({{ env.name }}):
       icon: portainer.png
