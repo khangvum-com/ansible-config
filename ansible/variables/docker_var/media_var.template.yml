@@ -10,3 +10,8 @@ jellyfin_api_key: {{ JELLYFIN_API_KEY }}
 
 # Immich
 immich_parent_dir: "/home/{{ ansible_user }}/docker/immich"
+# Permission: 
+# - asset.read,asset.statistics,asset.view,user.read
+# - server.statistics,server.storage
+# - user.read
+immich_api_key: {{ IMMICH_API_KEY }}
