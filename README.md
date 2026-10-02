@@ -190,7 +190,7 @@ flowchart LR
 > - **_Linux_** and **_ESXi_** distributions typically include **_pre-installed SSH_** services.
 
 > [!TIP]
-> If the automated **_[khangvum-com/answer-files](https://github.com/khangvum-com/answer-files)_** are utilized for OS deployment, **_SSH_** is **_already provisioned_** and **_configured_** during the initial installation.
+> If the automated **_[khangvum/answer-files](https://github.com/khangvum/answer-files)_** are utilized for OS deployment, **_SSH_** is **_already provisioned_** and **_configured_** during the initial installation.
 
 4.  **_SSH connection_** verified **_once_** from the controller to each host:
 
