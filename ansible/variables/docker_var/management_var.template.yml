@@ -35,3 +35,6 @@ home_assistant_long_lived_access_token: {{ HOME_ASSISTANT_LONG_LIVED_ACCESS_TOKE
 # Cloudflared
 cloudflared_parent_dir: "/home/{{ ansible_user }}/docker/cloudflared"
 cloudflare_tunnel_token: {{ CLOUDFLARE_TUNNEL_TOKEN }}
+
+# AdGuard Home
+adguardhome_parent_dir: "/home/{{ ansible_user }}/docker/adguardhome"
