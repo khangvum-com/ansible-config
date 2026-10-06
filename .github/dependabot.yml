@@ -13,7 +13,7 @@ updates:
 
   # 2. Docker containers & base images (Dockerfile & docker-compose.yml)
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/ansible-docker-settings"
     schedule:
       interval: "weekly"
     commit-message:
