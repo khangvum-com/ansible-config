@@ -1,19 +1,9 @@
 ---
 version: 2
 updates:
-  # 1. CI/CD Pipeline dependencies (.github/workflows/*.yml)
+  # CI/CD Pipeline dependencies (.github/workflows/*.yml)
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    open-pull-requests-limit: 5
-
-  # 2. Docker containers & base images (Dockerfile & docker-compose.yml)
-  - package-ecosystem: "docker"
-    directory: "/ansible-docker-settings"
     schedule:
       interval: "weekly"
     commit-message:
