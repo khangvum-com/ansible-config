@@ -31,3 +31,42 @@
     pull: "{{ docker_image_pull_action }}"
     state: present
     remove_orphans: true
+
+- name: AdGuard Home Readiness Verification
+  ansible.builtin.uri:
+    url: "http://{{ hostvars['KVM-MGMT01'].ansible_host }}:3001/control/status"
+    method: GET
+    user: "{{ ansible_user }}"
+    password: "{{ ansible_password }}"
+    force_basic_auth: yes
+    status_code: 200
+  register: adguard_status
+  until: adguard_status.status == 200
+  delegate_to: localhost
+
+# curl -X POST \
+#   -u "{{ USERNAME }}:{{ PASSWORD }}" \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#     "upstream_dns": [
+#       "[/khangvum.lab/]{{ DC_01_IP }}",
+#       "https://dns.cloudflare-dns.com/dns-query",
+#       "1.1.1.1"
+#     ]
+#   }' \
+#   http://localhost:3001/control/dns_config
+- name: AdGuard Home Upstream DNS Configuration
+  ansible.builtin.uri:
+    url: "http://{{ hostvars['KVM-MGMT01'].ansible_host }}:3001/control/dns_config"
+    method: POST
+    user: "{{ ansible_user }}"
+    password: "{{ ansible_password }}"
+    force_basic_auth: yes
+    body_format: json
+    body:
+      upstream_dns:
+        - "[/{{ domain_name }}/]{{ hostvars['KVM-DC01'].ansible_host }}"
+        - "https://dns.cloudflare-dns.com/dns-query"
+        - "1.1.1.1"
+    status_code: 200
+  delegate_to: localhost
