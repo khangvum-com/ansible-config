@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 LABEL org.opencontainers.image.authors="manhkhang0305@gmail.com"
 LABEL org.opencontainers.image.version="1.2.0"
