@@ -12,6 +12,7 @@
 {% set authentik = docker_services | selectattr('name', 'equalto', 'authentik') | first %}
 {% set homeassistant = docker_services | selectattr('name', 'equalto', 'homeassistant') | first %}
 {% set portainer = docker_services | selectattr('name', 'equalto', 'portainer') | first %}
+{% set adguardhome = docker_services | selectattr('name', 'equalto', 'adguardhome') | first %}
 {% set npm = docker_services | selectattr('name', 'equalto', 'npm') | first %}
 
 - Media:
@@ -140,6 +141,16 @@
 {% endfor %}
 
 - Networking:
+  - AdGuard Home:
+      icon: adguard-home.png
+      href: https://adguardhome.{{ public_domain_name }}
+      description: Network-wide ad blocking & DNS
+      siteMonitor: {{ adguardhome.forward_scheme | default('http') }}://{{ adguardhome.forward_host }}:{{ adguardhome.forward_port }}
+      widget:
+        type: adguard
+        url: {{ adguardhome.forward_scheme | default('http') }}://{{ adguardhome.forward_host }}:{{ adguardhome.forward_port }}
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
   - Nginx Proxy Manager:
       icon: nginx-proxy-manager.png
       href: https://npm.{{ public_domain_name }}
