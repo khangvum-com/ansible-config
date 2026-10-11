@@ -45,13 +45,13 @@ on:
     - cron: '0 2 * * *'
   push:
     branches:
-      - master
+      - main
     paths:
       - 'ansible/**'
       - '.github/workflows/ansible.yml'
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'ansible/**'
       - '.github/workflows/ansible.yml'
@@ -123,7 +123,7 @@ jobs:
         run: ansible-playbook site.yml $TAG_ARGS --syntax-check --vault-password-file .vault_pass
 
       - name: Execute Ansible Playbook
-        if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
         run: ansible-playbook site.yml $TAG_ARGS --vault-password-file .vault_pass
 
       - name: Clean up Vault Password File

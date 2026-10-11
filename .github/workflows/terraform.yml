@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'terraform/**'
       - '.github/workflows/terraform.yml'
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'terraform/**'
       - '.github/workflows/terraform.yml'
@@ -46,5 +46,5 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: terraform apply -auto-approve
