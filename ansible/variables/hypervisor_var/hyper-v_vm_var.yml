@@ -172,18 +172,31 @@ hyper_v_vm_list:
     autostop: shutDown
     power: on
     state: present
-    
-  # - name: KVM-WRK01
-  #   host: KVM-SRV01
-  #   cpu: 4
-  #   memory: 8
-  #   storage: 100
-  #   generation: 2
-  #   tpm: true
-  #   iso_source: /opt/ansible/installation-files/windows_11_pro_x64_unattend.iso
-  #   iso_destination: windows_11_pro_x64_unattend.iso
-  #   secure_boot_template: "Microsoft Windows"
-  #   autostart: start
-  #   autostop: shutDown
-  #   power: on
-  #   state: present
+  - name: KVM-WRK01
+    host: KVM-SRV01
+    cpu: 4
+    memory: 16
+    storage: 100
+    generation: 2
+    tpm: true
+    iso_source: /opt/ansible/installation-files/windows_11_pro_x64_unattend.iso
+    iso_destination: windows_11_pro_x64_unattend.iso
+    secure_boot_template: "Microsoft Windows"
+    autostart: start
+    autostop: shutDown
+    power: on
+    state: present
+  - name: KVM-WRK03
+    host: KVM-SRV01
+    cpu: 4
+    memory: 16
+    storage: 100
+    generation: 2
+    tpm: true
+    iso_source: /opt/ansible/installation-files/windows_10_pro_x64_unattend.iso
+    iso_destination: windows_10_pro_x64_unattend.iso
+    secure_boot_template: "Microsoft Windows"
+    autostart: start
+    autostop: shutDown
+    power: on
+    state: present

@@ -97,21 +97,34 @@ all:
                 - name: "KVM-SRV01-SW02"
                   adapter: "Wi-Fi"
                   ip: {{ ROUTER01_SW02_IP }}
-        # workstations:
-        #   hosts:
-        #     KVM-WRK01:
-        #       ansible_host: {{ WRK01_IP_ADDRESS }}
-        #       computer_name: KVM-WRK01
-        #       ansible_user: {{ USERNAME }}
-        #       ansible_password: {{ PASSWORD }}
-        #       win_license_key: {{ WIN_11_PRO_LICENSE_KEY }}
-        #       v_switches:
-        #         - name: "KVM-SRV01-SW01"
-        #           adapter: "Ethernet"
-        #           ip: {{ WRK01_SW01_IP }}
-        #         - name: "KVM-SRV01-SW02"
-        #           adapter: "Wi-Fi"
-        #           ip: {{ WRK01_SW02_IP }}
+        workstations:
+          hosts:
+            KVM-WRK01:
+              ansible_host: {{ WRK01_IP_ADDRESS }}
+              computer_name: KVM-WRK01
+              ansible_user: {{ USERNAME }}
+              ansible_password: {{ PASSWORD }}
+              win_license_key: {{ WIN_11_PRO_LICENSE_KEY }}
+              v_switches:
+                - name: "KVM-SRV01-SW01"
+                  adapter: "Ethernet"
+                  ip: {{ WRK01_SW01_IP }}
+                - name: "KVM-SRV01-SW02"
+                  adapter: "Wi-Fi"
+                  ip: {{ WRK01_SW02_IP }}
+            KVM-WRK03:
+              ansible_host: {{ WRK03_IP_ADDRESS }}
+              computer_name: KVM-WRK03
+              ansible_user: {{ USERNAME }}
+              ansible_password: {{ PASSWORD }}
+              win_license_key: {{ WIN_10_PRO_LICENSE_KEY }}
+              v_switches:
+                - name: "KVM-SRV01-SW01"
+                  adapter: "Ethernet"
+                  ip: {{ WRK03_SW01_IP }}
+                - name: "KVM-SRV01-SW02"
+                  adapter: "Wi-Fi"
+                  ip: {{ WRK03_SW02_IP }}
         containers:
           hosts:
             KVM-MEDIA01:
