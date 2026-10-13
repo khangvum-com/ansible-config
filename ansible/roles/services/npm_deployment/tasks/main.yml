@@ -124,53 +124,26 @@
       vars:
         current_match: "{{ npm_proxy_hosts.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
         active_cert: "{{ npm_certificates_refreshed.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
-        resolved_cert_id: "{{ active_cert[0].id | int if active_cert | length > 0 else 0 }}"
+        has_cert: "{{ active_cert | length > 0 }}"
+        resolved_cert_id: "{{ active_cert[0].id | string if has_cert else '0' }}"
       ansible.builtin.uri:
-        url: http://{{ ansible_host }}:81/api/nginx/proxy-hosts{{ '/' + (current_match[0].id | string) if current_match | length > 0 else '' }}
+        url: "http://{{ ansible_host }}:81/api/nginx/proxy-hosts{{ '/' + (current_match[0].id | string) if current_match | length > 0 else '' }}"
         method: "{{ 'PUT' if current_match | length > 0 else 'POST' }}"
         headers:
           Authorization: "Bearer {{ npm_api_token.json.token }}"
         body_format: json
-        body: |
-          {
-            "domain_names": ["{{ item.name }}.{{ domain_name }}"],
-            "forward_scheme": "{{ item.forward_scheme | default('http') }}",
-            "forward_host": "{{ item.forward_host }}",
-            "forward_port": {{ item.forward_port }},
-            "caching_enabled": false,
-            "block_exploits": true,
-            "allow_websocket_upgrade": true,
-            "access_list_id": 0,
-            "certificate_id": {{ resolved_cert_id }},
-            "ssl_forced": {{ true if resolved_cert_id | int > 0 else false }}
-          }
-        status_code: [200, 201]
-      loop: "{{ docker_services }}"
-      register: npm_proxy_result
-    - name: npm Proxy Host Setup
-      vars:
-        current_match: "{{ npm_proxy_hosts.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
-        active_cert: "{{ npm_certificates_refreshed.json | selectattr('domain_names', 'contains', item.name + '.' + domain_name) | list }}"
-        resolved_cert_id: "{{ active_cert[0].id | int if active_cert | length > 0 else 0 }}"
-      ansible.builtin.uri:
-        url: http://{{ ansible_host }}:81/api/nginx/proxy-hosts{{ '/' + (current_match[0].id | string) if current_match | length > 0 else '' }}
-        method: "{{ 'PUT' if current_match | length > 0 else 'POST' }}"
-        headers:
-          Authorization: "Bearer {{ npm_api_token.json.token }}"
-        body_format: json
-        body: |
-          {
-            "domain_names": ["{{ item.name }}.{{ domain_name }}"],
-            "forward_scheme": "{{ item.forward_scheme | default('http') }}",
-            "forward_host": "{{ item.forward_host }}",
-            "forward_port": {{ item.forward_port }},
-            "caching_enabled": false,
-            "block_exploits": true,
-            "allow_websocket_upgrade": true,
-            "access_list_id": 0,
-            "certificate_id": {{ resolved_cert_id }},
-            "ssl_forced": {{ true if resolved_cert_id | int > 0 else false }}
-          }
+        body:
+          domain_names:
+            - "{{ item.name }}.{{ domain_name }}"
+          forward_scheme: "{{ item.forward_scheme | default('http') }}"
+          forward_host: "{{ item.forward_host }}"
+          forward_port: "{{ item.forward_port }}"
+          caching_enabled: false
+          block_exploits: true
+          allow_websocket_upgrade: true
+          access_list_id: 0
+          certificate_id: "{{ resolved_cert_id }}"
+          ssl_forced: "{{ has_cert }}"
         status_code: [200, 201]
       loop: "{{ docker_services }}"
       register: npm_proxy_result
