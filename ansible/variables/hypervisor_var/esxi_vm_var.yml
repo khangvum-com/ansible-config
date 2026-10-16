@@ -49,8 +49,8 @@ esxi_vm_var:
     storage: 20
     generation: 2
     tpm: false
-    iso_source: /opt/ansible/installation-files/ubuntu_server_24.04_unattend.iso
-    iso_destination: ubuntu_server_24.04_unattend.iso
+    iso_source: /opt/ansible/installation-files/ubuntu_server_26.04_unattend.iso
+    iso_destination: ubuntu_server_26.04_unattend.iso
     guest_os: ubuntu-64 # https://knowledge.broadcom.com/external/article/321876/determine-the-guest-os-from-a-vm-configu.html
     autostart: true
     start_order: 4
