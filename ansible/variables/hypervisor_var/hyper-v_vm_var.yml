@@ -78,7 +78,7 @@ hyper_v_vm_list:
     host: KVM-SRV01 
     cpu: 4
     memory: 8
-    storage: 100
+    storage: 200
     generation: 2
     tpm: false
     iso_source: /opt/ansible/installation-files/ubuntu_server_24.04_unattend.iso
