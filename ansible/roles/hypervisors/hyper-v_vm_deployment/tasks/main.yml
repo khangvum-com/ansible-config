@@ -2,7 +2,7 @@
 - name: Windows Variables Load
   ansible.builtin.include_vars:
     file: ../../../variables/os_var/windows_var.yml
-    
+
 - name: Hyper-V Parent Directory Creation If Not Exists
   ansible.windows.win_file:
     path: "{{ hyper_v_parent_dir }}"
@@ -18,18 +18,20 @@
 - name: ISO Files' Existence on Remote Hyper-V Host Verification
   ansible.windows.win_stat:
     path: "{{ srv_iso_source_dir }}\\{{ item.iso_destination }}"
-  loop: "{{ hyper_v_vm_list }}"
-  when: item.host == computer_name
+  loop: "{{ hyper_v_vm_list | selectattr('host', 'equalto', computer_name) | unique(attribute='iso_destination') | list }}"
+  loop_control:
+    label: "{{ item.iso_destination }}"
   register: iso_files
 
 - name: ISO File Copy to Remote Hyper-V Host If Not Exists (Skipped on Pipeline)
   ansible.windows.win_copy:
-    src: "{{ item.iso_source }}"
-    dest: "{{ srv_iso_source_dir }}\\{{ item.iso_destination }}"
+    src: "{{ item.item.iso_source }}"
+    dest: "{{ srv_iso_source_dir }}\\{{ item.item.iso_destination }}"
     force: false
   loop: "{{ iso_files.results }}"
+  loop_control:
+    label: "{{ item.item.iso_destination }}"
   when:
-    - item.stat is defined
     - not item.stat.exists
     - lookup('env', 'CI') == '' # Only runs if NOT on pipeline
 
@@ -56,7 +58,7 @@
     auto_start_action: "{{ item.autostart }}"
     auto_stop_action: "{{ item.autostop }}"
   loop: "{{ hyper_v_vm_list }}"
-  when: 
+  when:
     - item.host == computer_name
     - item.state | default('present') == 'present'
 
