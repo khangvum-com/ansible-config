@@ -42,7 +42,7 @@ on:
     # - 4:00 AM Hungary
     # - 9:00 AM Vietnam
     # - 12:00 PM Melbourne
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * 0'
   push:
     branches:
       - main
