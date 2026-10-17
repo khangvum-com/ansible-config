@@ -83,6 +83,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v7
 
+      - name: Cache Ansible Collections
+        uses: actions/cache@v6
+        with:
+          path: ~/.ansible/collections
+          key: ansible-collections-${{ runner.os }}-${{ hashFiles('ansible/requirements.yml') }}
+          restore-keys: |
+            ansible-collections-${{ runner.os }}-
+
       - name: Install Ansible and Python dependencies
         run: |
           python -m pip install --upgrade pip
