@@ -45,7 +45,7 @@ RUN ansible-galaxy collection install -r requirements.yml -p /usr/share/ansible/
 EXPOSE 22
 
 # Create sshd privilege separation
-RUN mkdir /run/sshd
+RUN mkdir -p /run/sshd
 RUN chmod 0755 /run/sshd
 COPY ansible-docker-settings/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
