@@ -2,6 +2,8 @@
 collections:
   - name: ansible.windows
   - name: community.general
+  - name: community.vmware
+    version: "<8.0.0"
   - name: community.windows
   - name: microsoft.ad
   # - name: microsoft.hyperv
