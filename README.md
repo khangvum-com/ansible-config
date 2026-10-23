@@ -51,7 +51,7 @@ flowchart LR
                                                         **Role:** Identity & Access Management`")]
   SRV01 --> MEDIA01[KVM-MEDIA01] -- specs --- MEDIA01_SPECS[("`**CPU:** 4 vCPU
                                                             **RAM:** 8GB
-                                                            **Storage:** 100GB
+                                                            **Storage:** 200GB
                                                             **OS:** Ubuntu Server 24.04
                                                             **Role:** Media Server`")]
   SRV01 --> MGMT01[KVM-MGMT01] -- specs --- MGMT01_SPECS[("`**CPU:** 2 vCPU
