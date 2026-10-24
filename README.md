@@ -47,27 +47,27 @@ flowchart LR
   SRV01 --> IAM01[KVM-IAM01] -- specs --- IAM01_SPECS[("`**CPU:** 2 vCPU
                                                         **RAM:** 4GB
                                                         **Storage:** 40GB
-                                                        **OS:** Ubuntu Server 24.04
+                                                        **OS:** Ubuntu Server 26.04
                                                         **Role:** Identity & Access Management`")]
   SRV01 --> MEDIA01[KVM-MEDIA01] -- specs --- MEDIA01_SPECS[("`**CPU:** 4 vCPU
                                                             **RAM:** 8GB
                                                             **Storage:** 200GB
-                                                            **OS:** Ubuntu Server 24.04
+                                                            **OS:** Ubuntu Server 26.04
                                                             **Role:** Media Server`")]
   SRV01 --> MGMT01[KVM-MGMT01] -- specs --- MGMT01_SPECS[("`**CPU:** 2 vCPU
                                                             **RAM:** 4GB
                                                             **Storage:** 50GB
-                                                            **OS:** Ubuntu Server 24.04
+                                                            **OS:** Ubuntu Server 26.04
                                                             **Role:** Container Management Server`")]
   SRV01 --> MONITOR01[KVM-MONITOR01] -- specs --- MONITOR01_SPECS[("`**CPU:** 2 vCPU
                                                                     **RAM:** 4GB
                                                                     **Storage:** 100GB
-                                                                    **OS:** Ubuntu Server 24.04
+                                                                    **OS:** Ubuntu Server 26.04
                                                                     **Role:** Monitoring Server`")]
   SRV01 --> NAS01[KVM-NAS01] -- specs --- NAS01_SPECS[("`**CPU:** 2 vCPU
                                                         **RAM:** 4GB
                                                         **Storage:** 50GB
-                                                        **OS:** Ubuntu Server 24.04
+                                                        **OS:** Ubuntu Server 26.04
                                                         **Role:** NAS`")]
   SRV01 --> ROUTER01[KVM-ROUTER01] -- specs --- ROUTER01_SPECS[("`**CPU:** 2 vCPU
                                                                   **RAM:** 8GB
@@ -77,7 +77,7 @@ flowchart LR
   SRV01 --> VPN01[KVM-VPN01] -- specs --- VPN01_SPECS[("`**CPU:** 2 vCPU
                                                         **RAM:** 2GB
                                                         **Storage:** 20GB
-                                                        **OS:** Ubuntu Server 24.04
+                                                        **OS:** Ubuntu Server 26.04
                                                         **Role:** Primary VPN`")]
   SRV01 --> WEB01[KVM-WEB01] -- specs --- WEB01_SPECS[("`**CPU:** 2 vCPU
                                                         **RAM:** 8GB
