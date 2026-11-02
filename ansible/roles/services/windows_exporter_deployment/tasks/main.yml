@@ -26,7 +26,8 @@
   ansible.windows.win_powershell:
     script: |
       if (Test-Path "C:\Program Files\windows_exporter\windows_exporter.exe") {
-        (Get-Item "C:\Program Files\windows_exporter\windows_exporter.exe").VersionInfo.ProductVersion
+        $productVersion = (Get-Item "C:\Program Files\windows_exporter\windows_exporter.exe").VersionInfo.ProductVersion
+        [regex]::Match($productVersion, '^\d+\.\d+\.\d+').Value
       } else {
         Write-Output "0.0.0"
       }
@@ -41,4 +42,4 @@
     path: "https://github.com/prometheus-community/windows_exporter/releases/download/v{{ latest_version }}/windows_exporter-{{ latest_version }}-amd64.msi"
     state: present
     arguments: ADDLOCAL=FirewallException
-  when: current_version.output != latest_version
+  when: (current_version.output | first | default('0.0.0') | trim) != latest_version
