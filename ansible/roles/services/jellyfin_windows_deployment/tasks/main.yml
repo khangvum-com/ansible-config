@@ -26,6 +26,8 @@
   ansible.windows.win_powershell:
     script: |
       if (Test-Path "C:\Program Files\Jellyfin\Server\jellyfin.exe") {
+        $productVersion = (Get-Item "C:\Program Files\Jellyfin\Server\jellyfin.exe").VersionInfo.ProductVersion
+        [regex]::Match($productVersion, '^\d+\.\d+').Value
       } else {
         Write-Output "0.0.0"
       }
