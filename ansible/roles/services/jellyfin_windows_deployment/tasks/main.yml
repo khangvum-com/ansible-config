@@ -1,0 +1,57 @@
+---
+- name: Windows Variables Load
+  ansible.builtin.include_vars:
+    file: ../../../variables/os_var/windows_var.yml
+
+- name: Jellyfin Latest Version Retrieval
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/jellyfin/jellyfin/releases/latest"
+    return_content: true
+    body_format: json
+  register: github_api_output
+  delegate_to: localhost
+  run_once: true
+
+- name: Jellyfin Latest Version Definition
+  ansible.builtin.set_fact:
+    # Pulls "v12.4" and removes the "v" to get "12.4"
+    latest_version: "{{ github_api_output.json.tag_name | replace('v', '') }}"
+  run_once: true
+- debug:
+    msg: "Latest Version: {{ latest_version }}"
+  run_once: true
+
+# ansible.windows.win_file_version wouldn't work if the file doesn't exist
+- name: Windows Exporter Installed Version Query
+  ansible.windows.win_powershell:
+    script: |
+      if (Test-Path "C:\Program Files\Jellyfin\Server\jellyfin.exe") {
+        $productVersion = (Get-Item "C:\Program Files\Jellyfin\Server\jellyfin.exe").VersionInfo.ProductVersion
+        [regex]::Match($productVersion, '^\d+\.\d+').Value
+      } else {
+        Write-Output "0.0.0"
+      }
+
+      $Ansible.Changed = $false
+  register: current_version
+- debug:
+    msg: "Current Version: {{ current_version.output }}"
+
+- name: Jellyfin for Windows Installation/Upgrade
+  ansible.windows.win_package:
+    path: "https://repo.jellyfin.org/files/server/windows/latest-stable/amd64/jellyfin_{{ latest_version }}_windows-x64.exe"
+    state: present
+    arguments: /S
+  when: (current_version.output | first | default('0.0') | trim) != latest_version
+
+- name: Jellyfin HTTP Traffic From the Local Subnet Enablement
+  community.windows.win_firewall_rule:
+    name: "Jellyfin Media Server (TCP-In)"
+    action: allow
+    enabled: true
+    state: present
+    direction: in
+    protocol: tcp
+    localport: 8096
+    profiles: domain,private,public
+    remoteip: LocalSubnet

@@ -35,6 +35,10 @@
     - include_role:
         name: windows_exporter_deployment
       when: "'containers' not in group_names"
+    # KVM-SRV01
+    - include_role:
+        name: jellyfin_windows_deployment
+      when: inventory_hostname == "KVM-SRV01"
     # KVM-NAS01
     - include_role:
         name: nextcloud_deployment
@@ -68,9 +72,6 @@
         name: home_assistant_deployment
       when: inventory_hostname == "KVM-MGMT01"
     # KVM-MEDIA01
-    - include_role:
-        name: jellyfin_deployment
-      when: inventory_hostname == "KVM-MEDIA01"
     - include_role:
         name: immich_deployment
       when: inventory_hostname == "KVM-MEDIA01"

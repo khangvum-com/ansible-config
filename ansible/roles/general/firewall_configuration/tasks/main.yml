@@ -3,9 +3,9 @@
   community.windows.win_firewall_rule:
     name: "File and Printer Sharing (Echo Request - ICMPv4-In)"
     action: allow
-    direction: in
-    protocol: icmpv4
     enabled: true
     state: present
+    direction: in
+    protocol: icmpv4
     profiles: domain
   when: "'dcs' not in group_names"
