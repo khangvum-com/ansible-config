@@ -25,7 +25,8 @@ flowchart LR
                 • 2 x 1TB NVMe SSD (OS)
                 • 4TB SATA SSD (VMs)
                 • 8TB HDD (3 x 4TB - RSTe RAID 5)
-                **OS:** Windows Server 2025`")] -- specs --- SRV01[KVM-SRV01]
+                **OS:** Windows Server 2025
+                **Role:** Hypervisor & Jellyfin Media Server`")] -- specs --- SRV01[KVM-SRV01]
 
   %% - VMs
   SRV01 --> DB01[KVM-DB01] -- specs --- DB01_SPECS[("`**CPU:** 4 vCPU
