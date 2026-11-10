@@ -60,7 +60,7 @@ docker_services:
     forward_host: "{{ hostvars['KVM-MEDIA01'].ansible_host }}"
     forward_port: 2283
   - name: jellyfin
-    forward_host: "{{ hostvars['KVM-MEDIA01'].ansible_host }}"
+    forward_host: "{{ hostvars['KVM-SRV01'].ansible_host }}"
     forward_port: 8096
   - name: itinder
     forward_host: "{{ hostvars['KVM-WEB01'].ansible_host }}"
